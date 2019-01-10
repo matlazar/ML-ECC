@@ -4,13 +4,13 @@ import java.math.BigInteger;
 
 public class ElGamalSend {
 
-	private BigInteger sharedSecret;
+	private String sharedSecret;
 	private BigInteger R;
 	
-	public BigInteger getSharedSecret() {
+	public String getSharedSecret() {
 		return sharedSecret;
 	}
-	public void setSharedSecret(BigInteger sharedSecret) {
+	public void setSharedSecret(String sharedSecret) {
 		this.sharedSecret = sharedSecret;
 	}
 	public BigInteger getR() {

@@ -1,6 +1,7 @@
 package hr.matlazar.ecc.algoritams;
 
 import java.math.BigInteger;
+import java.util.Base64;
 import java.util.Random;
 
 import hr.matlazar.ecc.constants.DomainParameters;
@@ -14,8 +15,10 @@ public class ECES {
 	BigInteger n = new BigInteger(DomainParameters.secp192k1_n.replaceAll(" ", ""), 16);
 	BigInteger G = new BigInteger(DomainParameters.secp192k1_G.replaceAll(" ", ""), 16);
 
-	public KeyDomain encrypt(BigInteger publicKey, String message) {
+	public KeyDomain encrypt(String d, String message) {
 		
+		
+		BigInteger publicKey = new BigInteger(Base64.getDecoder().decode(d));
 		byte [] toByte = message.getBytes();
 		BigInteger M = new BigInteger(toByte);
 		BigInteger r;
@@ -33,17 +36,19 @@ public class ECES {
 		BigInteger sharedSecret = r.multiply(publicKey);
 		BigInteger c = M.multiply(sharedSecret);
 		c = c.mod(p);
-		keyDomain.setMessage(new String(c.toByteArray()));
+		keyDomain.setMessage(Base64.getEncoder().encodeToString(c.toByteArray()));
 		keyDomain.setSharedSecret(R);	
 		
 		return keyDomain;
 	}
 	
-	public String decrypt(KeyDomain keyDomain, BigInteger privateKey) {
+	public String decrypt(KeyDomain keyDomain, String q) {
+		
+		BigInteger privateKey = new BigInteger(Base64.getDecoder().decode(q));
 		
 		BigInteger x = privateKey.multiply(keyDomain.getSharedSecret());
 
-		BigInteger c = new BigInteger(keyDomain.getMessage().getBytes());
+		BigInteger c = new BigInteger(Base64.getDecoder().decode(keyDomain.getMessage()));
 		
 		BigInteger message = c.multiply(x.modInverse(p)).mod(p);
 		

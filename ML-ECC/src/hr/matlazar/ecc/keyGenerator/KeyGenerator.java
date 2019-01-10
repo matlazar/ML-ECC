@@ -1,9 +1,11 @@
 package hr.matlazar.ecc.keyGenerator;
 
 import java.math.BigInteger;
+import java.util.Base64;
 import java.util.Random;
 
 import hr.matlazar.ecc.constants.DomainParameters;
+import hr.matlazar.ecc.domains.KeyPair;
 
 public class KeyGenerator {
 	
@@ -21,6 +23,20 @@ public class KeyGenerator {
 	public BigInteger generatePublicKey(BigInteger privateKey) {
 		BigInteger publicKey = privateKey.multiply(g);
 		return publicKey;
+	}
+	
+	
+	public KeyPair generateKeys() {
+		
+		KeyPair keyPair = new KeyPair();
+			
+		BigInteger d = new BigInteger(n.bitLength(), rnd);
+		keyPair.setPrivateKey(Base64.getEncoder().encodeToString(d.toByteArray()));
+			
+		BigInteger Q = d.multiply(g);
+		keyPair.setPublicKey(Base64.getEncoder().encodeToString(Q.toByteArray()));
+
+		return keyPair;
 	}
 	
 }
