@@ -34,8 +34,7 @@ public class ECES {
 		KeyDomain keyDomain = new KeyDomain();
 		BigInteger R = r.multiply(G);
 		BigInteger sharedSecret = r.multiply(publicKey);
-		BigInteger c = M.multiply(sharedSecret);
-		c = c.mod(p);
+		BigInteger c = M.multiply(sharedSecret).mod(p);
 		keyDomain.setMessage(Base64.getEncoder().encodeToString(c.toByteArray()));
 		keyDomain.setSharedSecret(R);	
 		

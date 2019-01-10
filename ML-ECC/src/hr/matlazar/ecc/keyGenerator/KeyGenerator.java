@@ -15,17 +15,6 @@ public class KeyGenerator {
 	public BigInteger g = new BigInteger(DomainParameters.secp192k1_G.replaceAll(" ", ""), 16);
 	public BigInteger n = new BigInteger(DomainParameters.secp192k1_n.replaceAll(" ", ""), 16);
 	
-	public BigInteger generatePrivateKey() {
-		BigInteger privateKey = new BigInteger(n.bitLength(), rnd);
-		return privateKey;
-	}
-	
-	public BigInteger generatePublicKey(BigInteger privateKey) {
-		BigInteger publicKey = privateKey.multiply(g);
-		return publicKey;
-	}
-	
-	
 	public KeyPair generateKeys() {
 		
 		KeyPair keyPair = new KeyPair();
