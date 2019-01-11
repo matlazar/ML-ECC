@@ -8,7 +8,9 @@ import javax.crypto.spec.DHGenParameterSpec;
 
 import hr.matlazar.ecc.algoritams.DiffieHellman;
 import hr.matlazar.ecc.algoritams.ECES;
+import hr.matlazar.ecc.algoritams.ECIES;
 import hr.matlazar.ecc.algoritams.ElGamal;
+import hr.matlazar.ecc.domains.ECIESMessage;
 import hr.matlazar.ecc.domains.ElGamalSend;
 import hr.matlazar.ecc.domains.KeyDomain;
 import hr.matlazar.ecc.domains.KeyPair;
@@ -89,6 +91,14 @@ public class EccMain {
 		System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 
 		System.out.println("------------------------------------------------------------------\n");
+		
+		ECIES ecies = new ECIES();
+		
+		ECIESMessage ecm = ecies.encryptECIES("Enkripcija super", keyPair.getPublicKey());
+		System.out.println("Enkripcija " + ecm.getMessage() + "\n");
+		String p = ecies.decrypt(ecm, keyPair.getPrivateKey());
+		
+		System.out.println(p);
 	}
 
 }
