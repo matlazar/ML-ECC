@@ -4,6 +4,9 @@ import java.math.BigInteger;
 import java.util.Base64;
 import java.util.Scanner;
 
+import javax.crypto.spec.DHGenParameterSpec;
+
+import hr.matlazar.ecc.algoritams.DiffieHellman;
 import hr.matlazar.ecc.algoritams.ECES;
 import hr.matlazar.ecc.algoritams.ElGamal;
 import hr.matlazar.ecc.domains.ElGamalSend;
@@ -48,7 +51,44 @@ public class EccMain {
 		System.out.println("Decrypt: " + decrypt + "\n");
 		System.out.println("------------------------------------------------------------------\n");
 		
+		
+		System.out.println("--------------------------Diffie-Helman---------------------------\n");
+		
+		System.out.println("****************************DH-Keys*******************************\n");
+		
+		KeyPair bKeyPair =new KeyPair();
+		keyPair = keyGenerator.DHgenerateKeys();
+		bKeyPair = keyGenerator.DHgenerateKeys();
+		System.out.println("Alice's keys");
+		System.out.println("Private key: " + keyPair.getPrivateKey() + "\n");
+		System.out.println("Public key: " + keyPair.getPublicKey() + "\n");
+		System.out.println("******************************************************************\n");
+		System.out.println("Bob's keys");
+		System.out.println("Private key: " + bKeyPair.getPrivateKey() + "\n");
+		System.out.println("Public key: " + bKeyPair.getPublicKey() + "\n");
+		System.out.println("******************************************************************\n");
+		
+		String aliceSharedSecret = DiffieHellman.computeSharedSecret(bKeyPair.getPublicKey(), keyPair.getPrivateKey());
+		String bobSharedSecret = DiffieHellman.computeSharedSecret(keyPair.getPublicKey(), bKeyPair.getPrivateKey());
+		
+		System.out.println("Bob šalje Alice svoj javni kljuè: " + bKeyPair.getPublicKey() + "\n");
+		System.out.println("Alice generira zajednièku tajnu: " + aliceSharedSecret + "\n");
+		
+		System.out.println("Alice šalje Bobu svoj javni kljuè: " + keyPair.getPublicKey() + "\n");
+		System.out.println("Bob generira zajednièku tajnu: " + bobSharedSecret + "\n");
+		
+		boolean verification = DiffieHellman.verifySharedSecert(aliceSharedSecret, bobSharedSecret);
+		//keyPair.getPrivateKey(), bKeyPair.getPrivateKey()
+		
+		System.out.println("++++++++++++++++++++++++Verifikacija++++++++++++++++++++++++++++++\n");
+		if(verification) {
+			System.out.println("Verifikacija uspješna\n");
+		}else {
+			System.out.println("Verifikacija nije uspješna\n");
+		}
+		System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 
+		System.out.println("------------------------------------------------------------------\n");
 	}
 
 }

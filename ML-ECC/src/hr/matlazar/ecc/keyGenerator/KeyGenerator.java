@@ -28,4 +28,17 @@ public class KeyGenerator {
 		return keyPair;
 	}
 	
+	public KeyPair DHgenerateKeys() {
+		
+		KeyPair keyPair = new KeyPair();
+			
+		BigInteger d = new BigInteger(n.bitLength(), rnd);
+		keyPair.setPrivateKey(Base64.getEncoder().encodeToString(d.toByteArray()));
+			
+		BigInteger Q = g.modPow(d, p);
+		keyPair.setPublicKey(Base64.getEncoder().encodeToString(Q.toByteArray()));
+
+		return keyPair;
+	}
+	
 }
