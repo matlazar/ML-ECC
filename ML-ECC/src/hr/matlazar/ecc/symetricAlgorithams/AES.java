@@ -1,5 +1,7 @@
 package hr.matlazar.ecc.symetricAlgorithams;
 
+import java.security.MessageDigest;
+import java.util.Arrays;
 import java.util.Base64;
 
 import javax.crypto.Cipher;
@@ -11,8 +13,12 @@ public class AES {
 	
 	public static String encrypt(String value, String key) {
 		try {
+			MessageDigest sha = MessageDigest.getInstance("SHA-1");
+			byte[] key2 = Base64.getDecoder().decode(key);
+			key2 = sha.digest(key2);
+			key2 = Arrays.copyOf(key2, 16);
 			IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
-			SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
+			SecretKeySpec skeySpec = new SecretKeySpec(key2, "AES");
 
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
 			cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
@@ -27,8 +33,14 @@ public class AES {
 	
 	public static String decrypt(String encrypted, String key) {
 		try {
+			
+			MessageDigest sha = MessageDigest.getInstance("SHA-1");
+			byte[] key2 = Base64.getDecoder().decode(key);
+			key2 = sha.digest(key2);
+			key2 = Arrays.copyOf(key2, 16);
+			
 			IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
-			SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
+			SecretKeySpec skeySpec = new SecretKeySpec(key2, "AES");
 
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
 			cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);

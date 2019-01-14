@@ -46,7 +46,7 @@ public class EccMain {
 		
 		ElGamal elGamal = new ElGamal();
 		System.out.println(" Unesi tekst() ElGamal: ");
-		ElGamalSend egs = elGamal.encrtypt(keyPair.getPublicKey(), sc.nextLine());
+		ElGamalSend egs = elGamal.encrypt(keyPair.getPublicKey(), sc.nextLine());
 
 		System.out.println("Encrypt: " + egs.getSharedSecret()  + "\n");
 		String decrypt = elGamal.decrypt(egs, keyPair.getPrivateKey());
@@ -90,15 +90,17 @@ public class EccMain {
 		}
 		System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 
-		System.out.println("------------------------------------------------------------------\n");
+		System.out.println("--------------------------ECIES-----------------------------------\n");
 		
 		ECIES ecies = new ECIES();
-		
-		ECIESMessage ecm = ecies.encryptECIES("Enkripcija super", keyPair.getPublicKey());
+		keyPair = keyGenerator.generateKeys();
+		System.out.println("Unesi tekst za dekripciju: ");
+		ECIESMessage ecm = ecies.encryptECIES(sc.nextLine(), keyPair.getPublicKey());
 		System.out.println("Enkripcija " + ecm.getMessage() + "\n");
 		String p = ecies.decrypt(ecm, keyPair.getPrivateKey());
 		
 		System.out.println(p);
+		System.out.println("------------------------------------------------------------------\n");
 	}
 
 }

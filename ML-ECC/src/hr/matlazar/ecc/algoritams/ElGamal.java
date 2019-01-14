@@ -13,7 +13,7 @@ public class ElGamal {
 	BigInteger n = new BigInteger(DomainParameters.secp192k1_n.replaceAll(" ", ""), 16);
 	BigInteger G = new BigInteger(DomainParameters.secp192k1_G.replaceAll(" ", ""), 16);
 	
-	public ElGamalSend encrtypt(String d, String message) {
+	public ElGamalSend encrypt(String d, String message) {
 		
 		BigInteger publicKey = new BigInteger(Base64.getDecoder().decode(d));
 		
