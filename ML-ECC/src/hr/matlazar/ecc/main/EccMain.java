@@ -1,15 +1,18 @@
 package hr.matlazar.ecc.main;
 
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Scanner;
 
 import javax.crypto.spec.DHGenParameterSpec;
 
 import hr.matlazar.ecc.algoritams.DiffieHellman;
+import hr.matlazar.ecc.algoritams.ECDSA;
 import hr.matlazar.ecc.algoritams.ECES;
 import hr.matlazar.ecc.algoritams.ECIES;
 import hr.matlazar.ecc.algoritams.ElGamal;
+import hr.matlazar.ecc.domains.ECDSASignature;
 import hr.matlazar.ecc.domains.ECIESMessage;
 import hr.matlazar.ecc.domains.ElGamalSend;
 import hr.matlazar.ecc.domains.KeyDomain;
@@ -19,7 +22,7 @@ import hr.matlazar.ecc.keyGenerator.KeyGenerator;
 
 public class EccMain {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws NoSuchAlgorithmException {
 		
 		Scanner sc = new Scanner(System.in);
 		
@@ -101,6 +104,16 @@ public class EccMain {
 		
 		System.out.println(p);
 		System.out.println("------------------------------------------------------------------\n");
+		
+		ECDSASignature es = new ECDSASignature();
+		ECDSA ecdsa = new ECDSA();
+		es = ecdsa.signMessage("Mirko", keyPair.getPrivateKey());
+		System.out.println(es.getMessage());
+		System.out.println(es.getR());
+		System.out.println(es.getS());
+		
+		System.out.println("-----------------------------------------------\n");
+		ecdsa.dehashString(es, keyPair.getPublicKey());
 	}
 
 }
