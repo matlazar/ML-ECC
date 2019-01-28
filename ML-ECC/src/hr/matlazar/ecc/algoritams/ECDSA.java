@@ -64,7 +64,6 @@ public class ECDSA {
 		BigInteger xP = u1.multiply(G).add(u2.multiply(hA));
 		
 		if(r.equals(xP.mod(n))) {
-			System.out.println("pase");
 			return true;
 		}
 		
