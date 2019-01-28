@@ -107,13 +107,15 @@ public class EccMain {
 		
 		ECDSASignature es = new ECDSASignature();
 		ECDSA ecdsa = new ECDSA();
-		es = ecdsa.signMessage("Mirko", keyPair.getPrivateKey());
-		System.out.println(es.getMessage());
-		System.out.println(es.getR());
-		System.out.println(es.getS());
-		
+		es = ecdsa.signMessage(ecm.getMessage(), keyPair.getPrivateKey());
 		System.out.println("-----------------------------------------------\n");
-		ecdsa.dehashString(es, keyPair.getPublicKey());
+		boolean verify = ecdsa.dehashString(es, keyPair.getPublicKey());
+		
+		if(verify) {
+			System.out.println("Potpis je validan");
+		} else {
+			System.out.println("Potpis nije validan");
+		}
 	}
 
 }
