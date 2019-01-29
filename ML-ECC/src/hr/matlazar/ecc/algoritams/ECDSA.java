@@ -1,5 +1,12 @@
 package hr.matlazar.ecc.algoritams;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -13,6 +20,7 @@ import hr.matlazar.ecc.domains.ECDSASignature;
 public class ECDSA {
 	
 	Random rnd = new Random(); 
+	File file =  new File("files/ECDSA.txt");
 	BigInteger p = new BigInteger(DomainParameters.secp192k1_p.replaceAll(" ", ""), 16);
 	BigInteger n = new BigInteger(DomainParameters.secp192k1_n.replaceAll(" ", ""), 16);
 	BigInteger G = new BigInteger(DomainParameters.secp192k1_G.replaceAll(" ", ""), 16);
@@ -22,7 +30,11 @@ public class ECDSA {
 		String R = null;
 		String S = null;
 		String z = null;
+		ECDSASignature ecdsaSignature = new ECDSASignature();
+		
+		
 		try {
+			
 			digest = MessageDigest.getInstance("SHA-256");
 			byte[] hash = digest.digest(Base64.getEncoder().encode(message.getBytes()));
 			BigInteger hashNumber = new BigInteger(hash);
@@ -35,21 +47,22 @@ public class ECDSA {
 			R = Base64.getEncoder().encodeToString(r.toByteArray());
 			S = Base64.getEncoder().encodeToString(s.toByteArray());
 			z = Base64.getEncoder().encodeToString(hashNumber.toByteArray());
+			
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} 
 		
 	
-		ECDSASignature ecdsaSignature = new ECDSASignature();
+
 		ecdsaSignature.setMessage(message);
 		ecdsaSignature.setR(R);
 		ecdsaSignature.setS(S);
 		return ecdsaSignature;
 	}
 	
-	public boolean dehashString(ECDSASignature ecdsaSignature, String publicKey) throws NoSuchAlgorithmException {
+	public boolean dehashString(ECDSASignature ecdsaSignature,String publicKey) throws NoSuchAlgorithmException {
 		MessageDigest digest;
+		
 		digest = MessageDigest.getInstance("SHA-256");
 		byte[] hash = digest.digest(Base64.getEncoder().encode(ecdsaSignature.getMessage().getBytes()));
 		BigInteger z = new BigInteger(hash);
