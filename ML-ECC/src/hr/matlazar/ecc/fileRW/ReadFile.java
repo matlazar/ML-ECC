@@ -9,14 +9,17 @@ public class ReadFile {
 		switch (option) {
 		case "ECDSASignature":
 			return ReadSignature.read(file);
+		case "ECES":
+			return null;
+		case "ReadKeyFile":
+			return ReadKey.read(file);
 		default:
-			
 			return null;
 		}
 	}
 	
 	public static String getPublicKey(File file, String name) {
-		return null;
+		return ReadKey.publicKeyDHReader(file, name);
 	}
 	
 }

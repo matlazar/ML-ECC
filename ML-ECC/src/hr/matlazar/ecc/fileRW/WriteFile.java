@@ -38,15 +38,14 @@ public class WriteFile {
 			} catch (IOException e) {
 				e.printStackTrace();
 			} 
-		} else {
-			try {
-				FileWriter fileWriter = new FileWriter(filePath, true);
-		        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-			    bufferedWriter.write(name + ":" + publicKey);
-		        bufferedWriter.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		} 
+		try {
+			FileWriter fileWriter = new FileWriter(filePath, true);
+	        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+		    bufferedWriter.write(name + ":" + publicKey);
+	        bufferedWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
