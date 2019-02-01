@@ -9,6 +9,7 @@ import hr.matlazar.ecc.algoritams.ECDSA;
 import hr.matlazar.ecc.algoritams.ECES;
 import hr.matlazar.ecc.algoritams.ECIES;
 import hr.matlazar.ecc.algoritams.ElGamal;
+import hr.matlazar.ecc.constants.DomainParameters;
 import hr.matlazar.ecc.domains.ECDSASignature;
 import hr.matlazar.ecc.domains.ECIESMessage;
 import hr.matlazar.ecc.domains.ElGamalSend;
@@ -23,7 +24,7 @@ public class EccMain {
 		
 		Scanner sc = new Scanner(System.in);
 		
-		KeyGenerator keyGenerator = new KeyGenerator();
+		KeyGenerator keyGenerator = new KeyGenerator(DomainParameters.secp521r1);
 		KeyPair keyPair = new KeyPair();
 		keyPair = keyGenerator.generateKeys();
 		
@@ -35,7 +36,7 @@ public class EccMain {
 		System.out.println("----------------------------------------------------------------------\n");
 		
 		System.out.println("-----------------------------ECES---------------------------------\n");
-		ECES eces = new ECES();
+		ECES eces = new ECES("secp192k1");
 		System.out.println(" Unesi tekst() ECES: ");
 		KeyDomain keyDomain = eces.encrypt(keyPair.getPublicKey(), sc.nextLine());
 		System.out.println("Encryption: " + keyDomain.getMessage() + "\n");
@@ -44,7 +45,7 @@ public class EccMain {
 		
 		System.out.println("----------------------------ElGamal-------------------------------\n");
 		
-		ElGamal elGamal = new ElGamal();
+		ElGamal elGamal = new ElGamal(DomainParameters.secp521r1);
 		System.out.println(" Unesi tekst() ElGamal: ");
 		ElGamalSend egs = elGamal.encrypt(keyPair.getPublicKey(), sc.nextLine());
 
@@ -92,7 +93,7 @@ public class EccMain {
 
 		System.out.println("--------------------------ECIES-----------------------------------\n");
 		
-		ECIES ecies = new ECIES();
+		ECIES ecies = new ECIES(DomainParameters.secp521r1);
 		keyPair = keyGenerator.generateKeys();
 		System.out.println("Unesi tekst za dekripciju: ");
 		ECIESMessage ecm = ecies.encryptECIES(sc.nextLine(), keyPair.getPublicKey());
@@ -103,7 +104,7 @@ public class EccMain {
 		System.out.println("------------------------------------------------------------------\n");
 		
 		ECDSASignature es = new ECDSASignature();
-		ECDSA ecdsa = new ECDSA();
+		ECDSA ecdsa = new ECDSA(DomainParameters.secp521r1);
 		es = ecdsa.signMessage(ecm.getMessage(), keyPair.getPrivateKey());
 		System.out.println("-----------------------------------------------\n");
 		boolean verify = ecdsa.dehashString(es, keyPair.getPublicKey());

@@ -10,6 +10,7 @@ public class DomainParameters {
 
 	//----------------------------------------secp192k1--------------------------------------------------------------------------------------------------------
 
+	public static final String secp192k1 = "secp192k1";
 	public static final String secp192k1_p = "FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFE FFFFEE37";
 	public static final String secp192k1_a = "00000000 00000000 00000000 00000000 00000000 00000000";
 	public static final String secp192k1_b = "00000000 00000000 00000000 00000000 00000000 00000003";
@@ -21,6 +22,7 @@ public class DomainParameters {
 
 	//----------------------------------------secp192r1--------------------------------------------------------------------------------------------------------
 
+	public static final String secp192r1 = "secp192r1";
 	public static final String secp192r1_p = "FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFE FFFFFFFF FFFFFFFF";
 	public static final String secp192r1_a = "FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFE FFFFFFFF FFFFFFFC";
 	public static final String secp192r1_b = "64210519 E59C80E7 0FA7E9AB 72243049 FEB8DEEC C146B9B1";
@@ -33,6 +35,7 @@ public class DomainParameters {
 
 	//----------------------------------------secp224k1--------------------------------------------------------------------------------------------------------
 
+	public static final String secp224k1 = "secp224k1";
 	public static final String secp224k1_p = "FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFE FFFFE56D";
 	public static final String secp224k1_a = "00000000 00000000 00000000 00000000 00000000 00000000 00000000";
 	public static final String secp224k1_b = "00000000 00000000 00000000 00000000 00000000 00000000 00000005";
@@ -43,7 +46,8 @@ public class DomainParameters {
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	//----------------------------------------secp224r1--------------------------------------------------------------------------------------------------------
-
+	
+	public static final String secp224r1 = "secp224r1";
 	public static final String secp224r1_p = "FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF 00000000 00000000 00000001";
 	public static final String secp224r1_a = "FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFE FFFFFFFF FFFFFFFF FFFFFFFE";
 	public static final String secp224r1_b = "B4050A85 0C04B3AB F5413256 5044B0B7 D7BFD8BA 270B3943 2355FFB4";
@@ -56,6 +60,7 @@ public class DomainParameters {
 
 	//----------------------------------------secp256k1--------------------------------------------------------------------------------------------------------
 
+	public static final String secp256k1 = "secp256k1";
 	public static final String secp256k1_p = "FFFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFE FFFFFC2F";
 	public static final String secp256k1_a = "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000";
 	public static final String secp256k1_b = "00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000007";
@@ -65,8 +70,9 @@ public class DomainParameters {
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	//----------------------------------------secp224r1--------------------------------------------------------------------------------------------------------
+	//----------------------------------------secp256r1--------------------------------------------------------------------------------------------------------
 
+	public static final String secp256r1 = "secp256r1";
 	public static final String secp256r1_p = "FFFFFFFF 00000001 00000000 00000000 00000000 FFFFFFFF FFFFFFFF FFFFFFFF";
 	public static final String secp256r1_a = "FFFFFFFF 00000001 00000000 00000000 00000000 FFFFFFFF FFFFFFFF FFFFFFFC";
 	public static final String secp256r1_b = "5AC635D8 AA3A93E7 B3EBBD55 769886BC 651D06B0 CC53B0F6 3BCE3C3E 27D2604B";
@@ -79,6 +85,7 @@ public class DomainParameters {
 
 	//----------------------------------------secp384r1--------------------------------------------------------------------------------------------------------
 
+	public static final String secp384r1 = "secp384r1";
 	public static final String secp384r1_p = "FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFE FFFFFFFF 00000000 00000000 FFFFFFFF";
 	public static final String secp384r1_a = "FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFE FFFFFFFF 00000000 00000000 FFFFFFFC";
 	public static final String secp384r1_b = "B3312FA7 E23EE7E4 988E056B E3F82D19 181D9C6E FE814112 0314088F 5013875A C656398D 8A2ED19D 2A85C8ED D3EC2AEF";
@@ -90,7 +97,8 @@ public class DomainParameters {
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	//----------------------------------------secp521r1--------------------------------------------------------------------------------------------------------
-
+	
+	public static final String secp521r1 = "secp521r1";
 	public static final String secp521r1_p = "01FF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF";
 	public static final String secp521r1_a = "01FF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFC";
 	public static final String secp521r1_b = "0051 953EB961 8E1C9A1F 929A21A0 B68540EE A2DA725B 99B315F3 B8B48991 8EF109E1 56193951 EC7E937B 1652C0BD 3BB1BF07 3573DF88 3D2C34F1 EF451FD4 6B503F00";
@@ -100,6 +108,7 @@ public class DomainParameters {
 	public static final String secp521r1_n = "01FF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFA 51868783 BF2F966B 7FCC0148 F709A5D0 3BB5C9B8 899C47AE BB6FB71E 91386409";
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------	
+	
 	
 }
 
