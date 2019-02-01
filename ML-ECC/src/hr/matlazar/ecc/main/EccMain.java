@@ -10,11 +10,13 @@ import hr.matlazar.ecc.algoritams.ECES;
 import hr.matlazar.ecc.algoritams.ECIES;
 import hr.matlazar.ecc.algoritams.ElGamal;
 import hr.matlazar.ecc.constants.DomainParameters;
+import hr.matlazar.ecc.constants.FileName;
 import hr.matlazar.ecc.domains.ECDSASignature;
 import hr.matlazar.ecc.domains.ECIESMessage;
 import hr.matlazar.ecc.domains.ElGamalSend;
 import hr.matlazar.ecc.domains.KeyDomain;
 import hr.matlazar.ecc.domains.KeyPair;
+import hr.matlazar.ecc.fileRW.WriteFile;
 import hr.matlazar.ecc.keyGenerator.KeyGenerator;
 
 
@@ -24,7 +26,7 @@ public class EccMain {
 		
 		Scanner sc = new Scanner(System.in);
 		
-		KeyGenerator keyGenerator = new KeyGenerator(DomainParameters.secp521r1);
+		KeyGenerator keyGenerator = new KeyGenerator(DomainParameters.secp192k1);
 		KeyPair keyPair = new KeyPair();
 		keyPair = keyGenerator.generateKeys();
 		
@@ -32,6 +34,7 @@ public class EccMain {
 		
 		System.out.println("Private key: " + keyPair.getPrivateKey() + "\n");
 		System.out.println("Public key: " + keyPair.getPublicKey() + "\n");
+		WriteFile.write(FileName.PRIVATE_KEY, keyPair.getPrivateKey());
 		
 		System.out.println("----------------------------------------------------------------------\n");
 		
@@ -45,7 +48,7 @@ public class EccMain {
 		
 		System.out.println("----------------------------ElGamal-------------------------------\n");
 		
-		ElGamal elGamal = new ElGamal(DomainParameters.secp521r1);
+		ElGamal elGamal = new ElGamal(DomainParameters.secp192k1);
 		System.out.println(" Unesi tekst() ElGamal: ");
 		ElGamalSend egs = elGamal.encrypt(keyPair.getPublicKey(), sc.nextLine());
 
@@ -70,6 +73,7 @@ public class EccMain {
 		System.out.println("Private key: " + bKeyPair.getPrivateKey() + "\n");
 		System.out.println("Public key: " + bKeyPair.getPublicKey() + "\n");
 		System.out.println("******************************************************************\n");
+		WriteFile.write(FileName.PUBLIC_KEYS, "Darko:" + bKeyPair.getPublicKey(), "Ana:" + keyPair.getPublicKey());
 		
 		String aliceSharedSecret = DiffieHellman.computeSharedSecret(bKeyPair.getPublicKey(), keyPair.getPrivateKey());
 		String bobSharedSecret = DiffieHellman.computeSharedSecret(keyPair.getPublicKey(), bKeyPair.getPrivateKey());
@@ -81,7 +85,7 @@ public class EccMain {
 		System.out.println("Bob generira zajednièku tajnu: " + bobSharedSecret + "\n");
 		
 		boolean verification = DiffieHellman.verifySharedSecert(aliceSharedSecret, bobSharedSecret);
-		//keyPair.getPrivateKey(), bKeyPair.getPrivateKey()
+
 		
 		System.out.println("++++++++++++++++++++++++Verifikacija++++++++++++++++++++++++++++++\n");
 		if(verification) {
@@ -93,7 +97,7 @@ public class EccMain {
 
 		System.out.println("--------------------------ECIES-----------------------------------\n");
 		
-		ECIES ecies = new ECIES(DomainParameters.secp521r1);
+		ECIES ecies = new ECIES(DomainParameters.secp192k1);
 		keyPair = keyGenerator.generateKeys();
 		System.out.println("Unesi tekst za dekripciju: ");
 		ECIESMessage ecm = ecies.encryptECIES(sc.nextLine(), keyPair.getPublicKey());
@@ -104,7 +108,7 @@ public class EccMain {
 		System.out.println("------------------------------------------------------------------\n");
 		
 		ECDSASignature es = new ECDSASignature();
-		ECDSA ecdsa = new ECDSA(DomainParameters.secp521r1);
+		ECDSA ecdsa = new ECDSA(DomainParameters.secp192k1);
 		es = ecdsa.signMessage(ecm.getMessage(), keyPair.getPrivateKey());
 		System.out.println("-----------------------------------------------\n");
 		boolean verify = ecdsa.dehashString(es, keyPair.getPublicKey());
