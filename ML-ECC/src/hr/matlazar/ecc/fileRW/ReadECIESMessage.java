@@ -5,18 +5,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.util.Base64;
 
-import hr.matlazar.ecc.domains.KeyDomain;
+import hr.matlazar.ecc.domains.ECIESMessage;
 
-public class ReadDomainFiles {
+public class ReadECIESMessage {
 	
-	public static Object readKeyDoman(File file) {
-		KeyDomain keyDomain = new KeyDomain();
+	public static ECIESMessage readECIESMessage(File file) {
+		
+		ECIESMessage eciesMessage = new ECIESMessage();
+		
 		String line = null;
 		String m = null;
-		String ss = null;
+		String r = null;
 		 try {
 
 	            FileReader fileReader = new FileReader(file);
@@ -30,7 +30,7 @@ public class ReadDomainFiles {
 						readCunt--;
 						break;
 					case 1:
-						ss = line;
+						r = line;
 						readCunt--;
 						break;
 					default:
@@ -38,8 +38,9 @@ public class ReadDomainFiles {
 					}
 	            }   
 	            
-	            keyDomain.setMessage(m);
-	            keyDomain.setSharedSecret(ss);
+	            eciesMessage.setMessage(m);
+	            eciesMessage.setR(r);
+
 
 	            bufferedReader.close();         
 	        }
@@ -55,7 +56,6 @@ public class ReadDomainFiles {
 	        }
 		
 		
-		return keyDomain;
+		return eciesMessage;
 	}
-	
 }

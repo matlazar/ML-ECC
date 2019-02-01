@@ -17,7 +17,6 @@ public class ECES {
 
 	public KeyDomain encrypt(String d, String message) {
 		
-		
 		BigInteger publicKey = new BigInteger(Base64.getDecoder().decode(d));
 		byte [] toByte = message.getBytes();
 		BigInteger M = new BigInteger(toByte);
@@ -36,7 +35,7 @@ public class ECES {
 		BigInteger sharedSecret = r.multiply(publicKey);
 		BigInteger c = M.multiply(sharedSecret).mod(p);
 		keyDomain.setMessage(Base64.getEncoder().encodeToString(c.toByteArray()));
-		keyDomain.setSharedSecret(R);	
+		keyDomain.setSharedSecret(Base64.getEncoder().encodeToString(R.toByteArray()));	
 		
 		return keyDomain;
 	}
@@ -45,11 +44,13 @@ public class ECES {
 		
 		BigInteger privateKey = new BigInteger(Base64.getDecoder().decode(q));
 		
-		BigInteger x = privateKey.multiply(keyDomain.getSharedSecret());
+		BigInteger ss = new BigInteger(Base64.getDecoder().decode(keyDomain.getSharedSecret()));
+		
+		BigInteger x = privateKey.multiply(ss);
 
 		BigInteger c = new BigInteger(Base64.getDecoder().decode(keyDomain.getMessage()));
 		
-		BigInteger message = c.multiply(x.modInverse(p)).mod(p);
+		BigInteger message = x.modInverse(p).multiply(c).mod(p);
 		
 		String decrypt = new String(message.toByteArray());
 		

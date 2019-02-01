@@ -1,11 +1,8 @@
 package hr.matlazar.ecc.main;
 
-import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 import java.util.Scanner;
 
-import javax.crypto.spec.DHGenParameterSpec;
 
 import hr.matlazar.ecc.algoritams.DiffieHellman;
 import hr.matlazar.ecc.algoritams.ECDSA;
@@ -116,6 +113,8 @@ public class EccMain {
 		} else {
 			System.out.println("Potpis nije validan");
 		}
+		
+		sc.close();
 	}
 
 }

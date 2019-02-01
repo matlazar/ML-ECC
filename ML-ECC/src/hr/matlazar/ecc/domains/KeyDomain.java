@@ -1,16 +1,15 @@
 package hr.matlazar.ecc.domains;
 
-import java.math.BigInteger;
 
 public class KeyDomain {
 	
-	private BigInteger sharedSecret;
+	private String sharedSecret;
 	private String message;
 	
-	public BigInteger getSharedSecret() {
+	public String getSharedSecret() {
 		return sharedSecret;
 	}
-	public void setSharedSecret(BigInteger sharedSecret) {
+	public void setSharedSecret(String sharedSecret) {
 		this.sharedSecret = sharedSecret;
 	}
 	public String getMessage() {

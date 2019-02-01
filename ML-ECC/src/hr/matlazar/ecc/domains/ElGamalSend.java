@@ -1,11 +1,10 @@
 package hr.matlazar.ecc.domains;
 
-import java.math.BigInteger;
 
 public class ElGamalSend {
 
 	private String sharedSecret;
-	private BigInteger R;
+	private String R;
 	
 	public String getSharedSecret() {
 		return sharedSecret;
@@ -13,10 +12,10 @@ public class ElGamalSend {
 	public void setSharedSecret(String sharedSecret) {
 		this.sharedSecret = sharedSecret;
 	}
-	public BigInteger getR() {
+	public String getR() {
 		return R;
 	}
-	public void setR(BigInteger r) {
+	public void setR(String r) {
 		R = r;
 	}
 	

@@ -10,7 +10,11 @@ public class ReadFile {
 		case "ECDSASignature":
 			return ReadSignature.read(file);
 		case "ECES":
-			return null;
+			return ReadDomainFiles.readKeyDoman(file);
+		case "ECIES":
+			return ReadECIESMessage.readECIESMessage(file);
+		case "ElGamal":
+			return ReadElGamalSend.readElGamalSend(file);
 		case "ReadKeyFile":
 			return ReadKey.read(file);
 		default:

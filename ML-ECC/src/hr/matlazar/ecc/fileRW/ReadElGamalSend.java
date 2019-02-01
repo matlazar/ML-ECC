@@ -5,18 +5,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.util.Base64;
 
-import hr.matlazar.ecc.domains.KeyDomain;
+import hr.matlazar.ecc.domains.ElGamalSend;
 
-public class ReadDomainFiles {
+public class ReadElGamalSend {
 	
-	public static Object readKeyDoman(File file) {
-		KeyDomain keyDomain = new KeyDomain();
+	public static ElGamalSend readElGamalSend(File file) {
+		
+		ElGamalSend elGamalSend = new ElGamalSend();
+		
 		String line = null;
-		String m = null;
 		String ss = null;
+		String r = null;
 		 try {
 
 	            FileReader fileReader = new FileReader(file);
@@ -26,11 +26,11 @@ public class ReadDomainFiles {
 	            while((line = bufferedReader.readLine()) != null) {
 	                switch (readCunt) {
 					case 2:
-						m = line;
+						ss = line;
 						readCunt--;
 						break;
 					case 1:
-						ss = line;
+						r = line;
 						readCunt--;
 						break;
 					default:
@@ -38,8 +38,9 @@ public class ReadDomainFiles {
 					}
 	            }   
 	            
-	            keyDomain.setMessage(m);
-	            keyDomain.setSharedSecret(ss);
+	            elGamalSend.setSharedSecret(ss);
+	            elGamalSend.setR(r);
+
 
 	            bufferedReader.close();         
 	        }
@@ -55,7 +56,6 @@ public class ReadDomainFiles {
 	        }
 		
 		
-		return keyDomain;
+		return elGamalSend;
 	}
-	
 }

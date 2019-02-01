@@ -46,7 +46,7 @@ public class ReadSignature {
 	            ecdsaSignature.setMessage(m);
 	            ecdsaSignature.setR(r);
 	            ecdsaSignature.setS(s);
-	            // Always close files.
+
 	            bufferedReader.close();         
 	        }
 	        catch(FileNotFoundException ex) {

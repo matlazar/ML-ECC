@@ -31,7 +31,7 @@ public class ElGamal {
             }   
         }
         
-        elGamalSend.setR(r.multiply(G));
+        elGamalSend.setR(Base64.getEncoder().encodeToString(r.multiply(G).toByteArray()));
         elGamalSend.setSharedSecret(Base64.getEncoder().encodeToString(M.add(r.multiply(publicKey)).toByteArray()));
         
         
@@ -40,10 +40,12 @@ public class ElGamal {
 	
 	public String decrypt(ElGamalSend elGamalSend, String q) {
 		
+		BigInteger r = new BigInteger(Base64.getDecoder().decode(elGamalSend.getR()));
+		
 		BigInteger privateKey = new BigInteger(Base64.getDecoder().decode(q));
 		
 		BigInteger sharedSecred = new BigInteger(Base64.getDecoder().decode(elGamalSend.getSharedSecret()));
-		BigInteger M = sharedSecred.subtract(privateKey.multiply(elGamalSend.getR()));
+		BigInteger M = sharedSecred.subtract(privateKey.multiply(r));
 		String decrypt = new String(M.toByteArray());
 		return decrypt;
 	}
