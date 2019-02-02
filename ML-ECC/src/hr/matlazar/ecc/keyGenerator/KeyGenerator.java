@@ -1,15 +1,20 @@
 package hr.matlazar.ecc.keyGenerator;
 
+import java.io.File;
 import java.math.BigInteger;
 import java.util.Base64;
 import java.util.Random;
 
 import hr.matlazar.ecc.constants.DomainParameters;
 import hr.matlazar.ecc.domains.KeyPair;
+import hr.matlazar.ecc.fileRW.WriteFile;
 
 public class KeyGenerator {
 	
 	Random rnd = new Random();  
+	
+	File filePublic = new File("files/publicKey.txt");
+	File filePrivate = new File("files/privateKey.txt");
 	
 	BigInteger p = new BigInteger(DomainParameters.secp192k1_p.replaceAll(" ", ""), 16);
 	BigInteger g = new BigInteger(DomainParameters.secp192k1_G.replaceAll(" ", ""), 16);
@@ -73,9 +78,11 @@ public class KeyGenerator {
 			
 		BigInteger d = new BigInteger(n.bitLength(), rnd);
 		keyPair.setPrivateKey(Base64.getEncoder().encodeToString(d.toByteArray()));
+		WriteFile.write(filePrivate, Base64.getEncoder().encodeToString(d.toByteArray()));
 		
 		BigInteger Q = d.multiply(g);
 		keyPair.setPublicKey(Base64.getEncoder().encodeToString(Q.toByteArray()));
+		WriteFile.write(filePublic, Base64.getEncoder().encodeToString(Q.toByteArray()));	
 		
 		return keyPair;
 	}

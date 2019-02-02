@@ -1,14 +1,18 @@
 package hr.matlazar.ecc.algoritams;
 
+import java.io.File;
 import java.math.BigInteger;
 import java.util.Base64;
 import java.util.Random;
 
 import hr.matlazar.ecc.constants.DomainParameters;
 import hr.matlazar.ecc.domains.ECIESMessage;
+import hr.matlazar.ecc.fileRW.WriteFile;
 import hr.matlazar.ecc.symetricAlgorithams.AES;
 
 public class ECIES {
+	
+	File file = new File("files/ecies.txt");
 	
 	BigInteger n = new BigInteger(DomainParameters.secp192k1_n.replaceAll(" ", ""), 16);
 	BigInteger G = new BigInteger(DomainParameters.secp192k1_G.replaceAll(" ", ""), 16);
@@ -77,6 +81,8 @@ public class ECIES {
 		eciesMessage.setMessage(encrypted);
 		
 		eciesMessage.setR(Base64.getEncoder().encodeToString(R.toByteArray()));
+		
+		WriteFile.write(file, eciesMessage.getMessage(), eciesMessage.getR());
 		
 		return eciesMessage;
 	}
