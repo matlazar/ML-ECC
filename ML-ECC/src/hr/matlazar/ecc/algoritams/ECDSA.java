@@ -9,6 +9,7 @@ import java.util.Random;
 
 import hr.matlazar.ecc.constants.DomainParameters;
 import hr.matlazar.ecc.domains.ECDSASignature;
+import hr.matlazar.ecc.fileRW.WriteFile;
 
 public class ECDSA {
 	
@@ -102,29 +103,38 @@ public class ECDSA {
 		ecdsaSignature.setMessage(message);
 		ecdsaSignature.setR(R);
 		ecdsaSignature.setS(S);
+		
+		WriteFile.write(file, ecdsaSignature.getMessage(), ecdsaSignature.getR(), ecdsaSignature.getS());
 		return ecdsaSignature;
 	}
 	
-	public boolean dehashString(ECDSASignature ecdsaSignature,String publicKey) throws NoSuchAlgorithmException {
+	public boolean dehashString(ECDSASignature ecdsaSignature,String publicKey) {
 		MessageDigest digest;
 		
-		digest = MessageDigest.getInstance("SHA-256");
-		byte[] hash = digest.digest(Base64.getEncoder().encode(ecdsaSignature.getMessage().getBytes()));
-		BigInteger z = new BigInteger(hash);
-		BigInteger r = new BigInteger(Base64.getDecoder().decode(ecdsaSignature.getR().getBytes()));
-		BigInteger s = new BigInteger(Base64.getDecoder().decode(ecdsaSignature.getS().getBytes()));
-		BigInteger hA = new BigInteger(Base64.getDecoder().decode(publicKey.getBytes()));
-		
-		BigInteger w = s.modInverse(n);
-		
-		BigInteger u1 = w.multiply(z).mod(n);
-		BigInteger u2 = w.multiply(r).mod(n);
-		BigInteger xP = u1.multiply(G).add(u2.multiply(hA));
-		
-		if(r.equals(xP.mod(n))) {
-			return true;
+		try {
+			digest = MessageDigest.getInstance("SHA-256");
+			byte[] hash = digest.digest(Base64.getEncoder().encode(ecdsaSignature.getMessage().getBytes()));
+			BigInteger z = new BigInteger(hash);
+			BigInteger r = new BigInteger(Base64.getDecoder().decode(ecdsaSignature.getR().getBytes()));
+			BigInteger s = new BigInteger(Base64.getDecoder().decode(ecdsaSignature.getS().getBytes()));
+			BigInteger hA = new BigInteger(Base64.getDecoder().decode(publicKey.getBytes()));
+			
+			BigInteger w = s.modInverse(n);
+			
+			BigInteger u1 = w.multiply(z).mod(n);
+			BigInteger u2 = w.multiply(r).mod(n);
+			BigInteger xP = u1.multiply(G).add(u2.multiply(hA));
+			
+			if(r.equals(xP.mod(n))) {
+				return true;
+			} else {
+				return false;
+			}
+			
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
 		return false;
 		
 	}

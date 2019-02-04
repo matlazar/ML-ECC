@@ -12,10 +12,13 @@ import javax.swing.JTextField;
 import java.awt.Toolkit;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+import hr.matlazar.ecc.algoritams.ECDSA;
 import hr.matlazar.ecc.algoritams.ECIES;
 import hr.matlazar.ecc.algoritams.ElGamal;
+import hr.matlazar.ecc.domains.ECDSASignature;
 import hr.matlazar.ecc.domains.ECIESMessage;
 import hr.matlazar.ecc.domains.ElGamalSend;
 import hr.matlazar.ecc.domains.KeyPair;
@@ -25,6 +28,8 @@ import hr.matlazar.ecc.fileRW.ReadKey;
 import hr.matlazar.swing.buttonAction.GenerateKeys;
 import hr.matlazar.swing.comboBox.Algoritham;
 import hr.matlazar.swing.comboBox.KeySize;
+import hr.matlazar.swing.components.PopUp;
+
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -38,6 +43,8 @@ import javax.swing.border.Border;
 import java.awt.SystemColor;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.awt.event.ActionEvent;
 
 public class ECCMainWindow {
@@ -75,10 +82,14 @@ public class ECCMainWindow {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBackground(Color.DARK_GRAY);
-		frame.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Korisnik\\Desktop\\Workspace\\ML-ECC\\ML-ECC\\pictures\\iconLock.png"));
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage("pictures\\iconLock.png"));
 		frame.getContentPane().setBackground(Color.WHITE);
-		
-		
+		PopUp popUp = new PopUp();
+//		JFrame parent = new JFrame();
+//		parent.pack();
+//		parent.setVisible(true);
+//		parent.setLocationByPlatform(true);
+
 		KeySize keySize = new KeySize();
 		Algoritham algoritham = new Algoritham();
 		Border border = BorderFactory.createLineBorder(Color.BLACK);
@@ -136,17 +147,17 @@ public class ECCMainWindow {
 		txtPubicKey.setLineWrap(true);
 		txtPubicKey.setWrapStyleWord(true);
 		
-		JLabel lblPrivatniKlju = new JLabel("Privatni klju\u010D");
+		JLabel lblPrivatniKljuc = new JLabel("Privatni klju\u010D");
 		
-		JLabel lblJavniKlju = new JLabel("Javni klju\u010D");
+		JLabel lblJavniKljuc = new JLabel("Javni klju\u010D");
 		
-		JLabel lblNisteUnijeliNita = new JLabel("Niste unijeli ni\u0161ta za enkripciju");
-		lblNisteUnijeliNita.setForeground(Color.RED);
-		lblNisteUnijeliNita.setVisible(false);
+		JLabel lblNisteUnijeliNista = new JLabel("Niste unijeli ni\u0161ta za enkripciju");
+		lblNisteUnijeliNista.setForeground(Color.RED);
+		lblNisteUnijeliNista.setVisible(false);
 		
-		JLabel lblUitajteTekstIli = new JLabel("U\u010Ditajte tekst ili enkriptirajte novi tekst");
-		lblUitajteTekstIli.setForeground(Color.RED);
-		lblUitajteTekstIli.setVisible(false);
+		JLabel lblUcitajteTekst = new JLabel("U\u010Ditajte tekst ili enkriptirajte novi tekst");
+		lblUcitajteTekst.setForeground(Color.RED);
+		lblUcitajteTekst.setVisible(false);
 		
 		JButton btnKeyGenerator = new JButton("Izgeneriraj klju\u010Deve");
 		btnKeyGenerator.addActionListener(new ActionListener() {
@@ -162,9 +173,9 @@ public class ECCMainWindow {
 			public void actionPerformed(ActionEvent arg0) {
 
 				if(txtToEncryt.getText().replaceAll(" ", "").isEmpty()) {
-					lblNisteUnijeliNita.setVisible(true);
+					lblNisteUnijeliNista.setVisible(true);
 				}else {
-					lblNisteUnijeliNita.setVisible(false);
+					lblNisteUnijeliNista.setVisible(false);
 					File file = new File("files/publicKey.txt");
 					if(algorithamBox.getSelectedItem().toString().equals("El-Gamal")) {
 						File elgamal  = new File("files/elgamal.txt");
@@ -187,9 +198,9 @@ public class ECCMainWindow {
 		btnDekriptiraj.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(encryptedText.getText().replaceAll(" ", "").isEmpty()) {
-					lblUitajteTekstIli.setVisible(true);
+					lblUcitajteTekst.setVisible(true);
 				}else {
-					lblUitajteTekstIli.setVisible(false);
+					lblUcitajteTekst.setVisible(false);
 					File file = new File("files/privateKey.txt");
 					if(algorithamBox.getSelectedItem().toString().equals("El-Gamal")) {
 						File elgamal  = new File("files/elgamal.txt");
@@ -207,8 +218,8 @@ public class ECCMainWindow {
 			}
 		});
 		
-		JButton btnUitajKljueve = new JButton("U\u010Ditaj klju\u010Deve");
-		btnUitajKljueve.addActionListener(new ActionListener() {
+		JButton btnUcitajKljuc = new JButton("U\u010Ditaj klju\u010Deve");
+		btnUcitajKljuc.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				File privateKey = new File("files/privateKey.txt");
 				File publicKey = new File("files/publicKey.txt");
@@ -217,8 +228,8 @@ public class ECCMainWindow {
 			}
 		});
 		
-		JButton btnUitajEnkriptiraniTeskt = new JButton("U\u010Ditaj enkriptirani teskt");
-		btnUitajEnkriptiraniTeskt.addActionListener(new ActionListener() {
+		JButton btnUcitajEnkriptiraniTeskt = new JButton("U\u010Ditaj enkriptirani teskt");
+		btnUcitajEnkriptiraniTeskt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				File eciesFile = new File("files/ecies.txt");
 				File elgamal  = new File("files/elgamal.txt");
@@ -232,6 +243,45 @@ public class ECCMainWindow {
 			}
 		});
 		
+		JButton btnPotpisi = new JButton("Potpi\u0161i");
+		btnPotpisi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(txtToEncryt.getText().replaceAll(" ", "").isEmpty()) {
+					lblNisteUnijeliNista.setVisible(true);
+				}else {
+					if(txtPrivateKey.getText().isEmpty()) {
+//						JOptionPane.showMessageDialog(parent, "Uèitajte kljuèeve!");
+						popUp.popUpWindow("Uèitaj kljuèeve");
+					} else {
+						lblNisteUnijeliNista.setVisible(false);
+						ECDSA ecdsa = new ECDSA(keyLength.getSelectedItem().toString());
+						ecdsa.signMessage(encryptedText.getText(), txtPrivateKey.getText());
+//						JOptionPane.showMessageDialog(parent, "Potpisano");
+						popUp.popUpWindow("Potpisano");
+					}
+				}
+			}
+		});
+		
+		JButton btnProvijeriPotpis = new JButton("Provijeri potpis");
+		btnProvijeriPotpis.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(txtPubicKey.getText().isEmpty() || encryptedText.getText().isEmpty()) {
+//					JOptionPane.showMessageDialog(parent, "Uèitajte kljuèeve!");
+					popUp.popUpWindow("Uèitaj kljuèeve");
+				} else {
+					File file = new File("files/ECDSA.txt");
+					ECDSA ecdsa = new ECDSA(keyLength.getSelectedItem().toString());
+					ECDSASignature ecdsaSignature = (ECDSASignature) ReadFile.readFile(file, "ECDSASignature");
+					if(ecdsa.dehashString(ecdsaSignature, txtPubicKey.getText())) {
+						btnProvijeriPotpis.setBackground(Color.GREEN);
+					} else {
+						btnProvijeriPotpis.setBackground(Color.RED);
+					}
+				}
+			}
+		});
+		
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -241,8 +291,28 @@ public class ECCMainWindow {
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
 							.addGroup(groupLayout.createSequentialGroup()
 								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addComponent(panel, GroupLayout.PREFERRED_SIZE, 267, GroupLayout.PREFERRED_SIZE)
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(48)
+										.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+											.addComponent(btnUcitajKljuc, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+											.addComponent(btnKeyGenerator, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE))))
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addComponent(lblPrivatniKljuc, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+									.addComponent(txtPrivateKey, GroupLayout.PREFERRED_SIZE, 322, GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addComponent(txtPubicKey, GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
+									.addComponent(lblJavniKljuc, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)))
+							.addGroup(groupLayout.createSequentialGroup()
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 									.addComponent(lblTekstZaEnkripciju, GroupLayout.PREFERRED_SIZE, 113, GroupLayout.PREFERRED_SIZE)
-									.addComponent(txtToEncryt, GroupLayout.PREFERRED_SIZE, 302, GroupLayout.PREFERRED_SIZE))
+									.addComponent(txtToEncryt, GroupLayout.PREFERRED_SIZE, 302, GroupLayout.PREFERRED_SIZE)
+									.addGroup(groupLayout.createSequentialGroup()
+										.addComponent(btnEncrypt, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(btnPotpisi, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)))
 								.addPreferredGap(ComponentPlacement.RELATED)
 								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
 									.addComponent(lblEnkriptiraniTekst, GroupLayout.PREFERRED_SIZE, 134, GroupLayout.PREFERRED_SIZE)
@@ -250,31 +320,19 @@ public class ECCMainWindow {
 									.addGroup(groupLayout.createSequentialGroup()
 										.addComponent(btnDekriptiraj)
 										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(btnUitajEnkriptiraniTeskt, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-									.addComponent(lblUitajteTekstIli, GroupLayout.PREFERRED_SIZE, 294, GroupLayout.PREFERRED_SIZE))
-								.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(btnUcitajEnkriptiraniTeskt, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+									.addComponent(lblUcitajteTekst, GroupLayout.PREFERRED_SIZE, 294, GroupLayout.PREFERRED_SIZE))
 								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(lblDekriptiraniTekst, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
-									.addComponent(decryptedText, GroupLayout.PREFERRED_SIZE, 308, GroupLayout.PREFERRED_SIZE))
-								.addGap(4))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(panel, GroupLayout.PREFERRED_SIZE, 267, GroupLayout.PREFERRED_SIZE)
 									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(48)
-										.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-											.addComponent(btnUitajKljueve, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-											.addComponent(btnKeyGenerator, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE))))
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(lblPrivatniKlju, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-									.addComponent(txtPrivateKey, GroupLayout.PREFERRED_SIZE, 322, GroupLayout.PREFERRED_SIZE))
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(txtPubicKey, GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
-									.addComponent(lblJavniKlju, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE))))
-						.addComponent(btnEncrypt, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNisteUnijeliNita, GroupLayout.PREFERRED_SIZE, 255, GroupLayout.PREFERRED_SIZE))
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+											.addComponent(lblDekriptiraniTekst, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
+											.addComponent(decryptedText, GroupLayout.PREFERRED_SIZE, 308, GroupLayout.PREFERRED_SIZE)))
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(94)
+										.addComponent(btnProvijeriPotpis, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)))
+								.addGap(4)))
+						.addComponent(lblNisteUnijeliNista, GroupLayout.PREFERRED_SIZE, 255, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap(82, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
@@ -292,13 +350,13 @@ public class ECCMainWindow {
 							.addPreferredGap(ComponentPlacement.RELATED)))
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-							.addComponent(lblPrivatniKlju)
-							.addComponent(lblJavniKlju))
+							.addComponent(lblPrivatniKljuc)
+							.addComponent(lblJavniKljuc))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnKeyGenerator)))
 					.addGap(2)
-					.addComponent(btnUitajKljueve)
+					.addComponent(btnUcitajKljuc)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblDekriptiraniTekst)
@@ -306,18 +364,20 @@ public class ECCMainWindow {
 						.addComponent(lblTekstZaEnkripciju))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(txtToEncryt, GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-						.addComponent(encryptedText, GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-						.addComponent(decryptedText, GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE))
+						.addComponent(txtToEncryt, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+						.addComponent(encryptedText, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+						.addComponent(decryptedText, GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnEncrypt)
 						.addComponent(btnDekriptiraj)
-						.addComponent(btnUitajEnkriptiraniTeskt))
+						.addComponent(btnUcitajEnkriptiraniTeskt)
+						.addComponent(btnPotpisi)
+						.addComponent(btnProvijeriPotpis))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNisteUnijeliNita)
-						.addComponent(lblUitajteTekstIli))
+						.addComponent(lblNisteUnijeliNista)
+						.addComponent(lblUcitajteTekst))
 					.addGap(207))
 		);
 		
