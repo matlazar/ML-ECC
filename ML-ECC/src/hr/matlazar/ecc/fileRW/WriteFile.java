@@ -42,7 +42,7 @@ public class WriteFile {
 		try {
 			FileWriter fileWriter = new FileWriter(filePath, true);
 	        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-		    bufferedWriter.write(name + ":" + publicKey);
+		    bufferedWriter.write(name + ":" + publicKey + "\n");
 	        bufferedWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -63,6 +63,29 @@ public class WriteFile {
 		}
 		
 		return lines;
+	}
+	
+	public static boolean checkIdentity(File file, String name) {
+		String line = null;
+		boolean validation = true;
+		BufferedReader reader;
+		try {
+			reader = new BufferedReader( new FileReader(file));
+			while ((line = reader.readLine()) != null) {
+            	String pom = line.substring(0,line.indexOf(":"));
+            	if(name.toLowerCase().equals(pom.toLowerCase())) {
+            		validation = false;
+            		break;
+            	}
+			}
+			reader.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return validation;
 	}
 	
 }

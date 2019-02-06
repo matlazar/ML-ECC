@@ -75,8 +75,9 @@ public class EccMain {
 		System.out.println("******************************************************************\n");
 		WriteFile.write(FileName.PUBLIC_KEYS, "Darko:" + bKeyPair.getPublicKey(), "Ana:" + keyPair.getPublicKey());
 		
-		String aliceSharedSecret = DiffieHellman.computeSharedSecret(bKeyPair.getPublicKey(), keyPair.getPrivateKey());
-		String bobSharedSecret = DiffieHellman.computeSharedSecret(keyPair.getPublicKey(), bKeyPair.getPrivateKey());
+		DiffieHellman diffieHellman = new DiffieHellman("secp192k1");
+		String aliceSharedSecret = diffieHellman.computeSharedSecret(bKeyPair.getPublicKey(), keyPair.getPrivateKey());
+		String bobSharedSecret = diffieHellman.computeSharedSecret(keyPair.getPublicKey(), bKeyPair.getPrivateKey());
 		
 		System.out.println("Bob šalje Alice svoj javni kljuè: " + bKeyPair.getPublicKey() + "\n");
 		System.out.println("Alice generira zajednièku tajnu: " + aliceSharedSecret + "\n");

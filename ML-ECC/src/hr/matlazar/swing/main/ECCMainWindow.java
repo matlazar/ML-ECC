@@ -85,10 +85,6 @@ public class ECCMainWindow {
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage("pictures\\iconLock.png"));
 		frame.getContentPane().setBackground(Color.WHITE);
 		PopUp popUp = new PopUp();
-//		JFrame parent = new JFrame();
-//		parent.pack();
-//		parent.setVisible(true);
-//		parent.setLocationByPlatform(true);
 
 		KeySize keySize = new KeySize();
 		Algoritham algoritham = new Algoritham();
@@ -250,13 +246,11 @@ public class ECCMainWindow {
 					lblNisteUnijeliNista.setVisible(true);
 				}else {
 					if(txtPrivateKey.getText().isEmpty()) {
-//						JOptionPane.showMessageDialog(parent, "Uèitajte kljuèeve!");
 						popUp.popUpWindow("Uèitaj kljuèeve");
 					} else {
 						lblNisteUnijeliNista.setVisible(false);
 						ECDSA ecdsa = new ECDSA(keyLength.getSelectedItem().toString());
 						ecdsa.signMessage(encryptedText.getText(), txtPrivateKey.getText());
-//						JOptionPane.showMessageDialog(parent, "Potpisano");
 						popUp.popUpWindow("Potpisano");
 					}
 				}
@@ -267,7 +261,6 @@ public class ECCMainWindow {
 		btnProvijeriPotpis.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(txtPubicKey.getText().isEmpty() || encryptedText.getText().isEmpty()) {
-//					JOptionPane.showMessageDialog(parent, "Uèitajte kljuèeve!");
 					popUp.popUpWindow("Uèitaj kljuèeve");
 				} else {
 					File file = new File("files/ECDSA.txt");
@@ -282,6 +275,16 @@ public class ECCMainWindow {
 			}
 		});
 		
+		JButton btnDiffiehellmanAlgoritham = new JButton("Diffie-Hellman algoritam");
+		btnDiffiehellmanAlgoritham.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				DiffieHellmanWindow dhFrame = new DiffieHellmanWindow();
+				dhFrame.DiffieHellmanScreen();
+				
+			}
+		});
+		frame.getContentPane().add(btnDiffiehellmanAlgoritham);
+		
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -290,13 +293,7 @@ public class ECCMainWindow {
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
 							.addGroup(groupLayout.createSequentialGroup()
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(panel, GroupLayout.PREFERRED_SIZE, 267, GroupLayout.PREFERRED_SIZE)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(48)
-										.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-											.addComponent(btnUcitajKljuc, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-											.addComponent(btnKeyGenerator, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE))))
+								.addComponent(panel, GroupLayout.PREFERRED_SIZE, 267, GroupLayout.PREFERRED_SIZE)
 								.addPreferredGap(ComponentPlacement.UNRELATED)
 								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 									.addComponent(lblPrivatniKljuc, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
@@ -331,7 +328,14 @@ public class ECCMainWindow {
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGap(94)
 										.addComponent(btnProvijeriPotpis, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)))
-								.addGap(4)))
+								.addGap(4))
+							.addGroup(groupLayout.createSequentialGroup()
+								.addGap(48)
+								.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+									.addComponent(btnUcitajKljuc, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(btnKeyGenerator, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE))
+								.addGap(267)
+								.addComponent(btnDiffiehellmanAlgoritham, GroupLayout.PREFERRED_SIZE, 183, GroupLayout.PREFERRED_SIZE)))
 						.addComponent(lblNisteUnijeliNista, GroupLayout.PREFERRED_SIZE, 255, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap(82, Short.MAX_VALUE))
 		);
@@ -356,7 +360,9 @@ public class ECCMainWindow {
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnKeyGenerator)))
 					.addGap(2)
-					.addComponent(btnUcitajKljuc)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnUcitajKljuc)
+						.addComponent(btnDiffiehellmanAlgoritham))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblDekriptiraniTekst)

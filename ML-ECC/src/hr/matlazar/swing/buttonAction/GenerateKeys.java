@@ -10,4 +10,9 @@ public class GenerateKeys {
 		return keyGenerator.generateKeys();
 	}
 	
+	public static KeyPair getDHKey(String option) {
+		KeyGenerator keyGenerator = new KeyGenerator(option);
+		return keyGenerator.DHgenerateKeys();
+	}
+	
 }
