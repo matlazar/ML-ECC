@@ -4,8 +4,9 @@ import java.math.BigInteger;
 
 public class ECCArithmetic {
 
-	private static BigInteger p = new BigInteger("23");
-	private static BigInteger a = new BigInteger("0");
+	private static BigInteger p; 
+	private static BigInteger a;
+	private static BigInteger b;
 
 	public static PointEC add(PointEC t1, PointEC t2) {
 		BigInteger lambda = null;

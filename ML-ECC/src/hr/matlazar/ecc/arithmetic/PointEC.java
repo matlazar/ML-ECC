@@ -4,14 +4,14 @@ import java.math.BigInteger;
 
 public class PointEC {
 
-	private static BigInteger p = new BigInteger("23");
-	private static BigInteger a = new BigInteger("0");
-	private static BigInteger b = new BigInteger("7");
+	private static BigInteger p;
+	private static BigInteger a;
+	private static BigInteger b;
 
 	private BigInteger x;
 	private BigInteger y;
 	private boolean onCurve;
-
+	
 	public PointEC(BigInteger x, BigInteger y) {
 		super();
 		this.x = x;
