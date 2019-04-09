@@ -1,21 +1,21 @@
 package hr.matlazar.ecc.arithmetic;
 
 import java.math.BigInteger;
+import java.util.function.BiFunction;
 
 public class ECCArithmetic {
 
-	private static BigInteger p; 
-	private static BigInteger a;
-	private static BigInteger b;
 
-	public static PointEC add(PointEC t1, PointEC t2) {
+	
+	
+
+	public static PointEC add(PointEC t1, PointEC t2, BigInteger a, BigInteger b, BigInteger p) {
 		BigInteger lambda = null;
 		BigInteger x1 = null;
 		BigInteger y1 = null;
-		;
 
 		if (t1.getX().equals(t2.getX()) && t1.getY().equals(t2.getY())) {
-			return dbl(t1);
+			return dbl(t1, a, b, p);
 		}
 
 		if (t1.getX().equals(new BigInteger("0")) && t1.getY().equals(new BigInteger("0"))) {
@@ -38,13 +38,13 @@ public class ECCArithmetic {
 			y1 = new BigInteger("0");
 		}
 
-		PointEC tRez = new PointEC(x1, y1);
+		PointEC tRez = new PointEC(x1, y1, a, b, p);
 
 		return tRez;
 
 	}
 
-	public static PointEC dbl(PointEC t) {
+	public static PointEC dbl(PointEC t, BigInteger a, BigInteger b, BigInteger p) {
 
 		BigInteger lambda = null;
 		BigInteger x1 = null;
@@ -70,20 +70,19 @@ public class ECCArithmetic {
 
 		}
 
-		PointEC tRez = new PointEC(x1, y1);
+		PointEC tRez = new PointEC(x1, y1, a, b, p);
 		return tRez;
 	}
 
-	public static PointEC mul(BigInteger n, PointEC ponSum) {
-		PointEC r = new PointEC(new BigInteger("0"), new BigInteger("0"));
-		PointEC p = ponSum;
+	public static PointEC mul(BigInteger n, PointEC ponSum, BigInteger a, BigInteger b, BigInteger p) {
+		PointEC r = new PointEC(new BigInteger("0"), new BigInteger("0"), a, b, p);
+		PointEC s = ponSum;
 		byte[] bytes = n.toByteArray();
 		boolean[] bit = getBitArray(bytes);
-		System.out.println(bit.length);
 		for (int i = bit.length - 1; i >= 0; i--) {
 			if (bit[i])
-				r = add(r, p);
-			p = dbl(p);
+				r = add(r, s, a, b, p);
+			s = dbl(s, a, b, p);
 		}
 		return r;
 	}
