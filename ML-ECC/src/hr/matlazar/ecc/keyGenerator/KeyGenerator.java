@@ -148,22 +148,22 @@ public class KeyGenerator {
 		
 		ECCDHKeyPair eccdhKeyPair = new ECCDHKeyPair();
 		PointEC pointG = pointG(bits, p);
-		
-		BigInteger d = new BigInteger(n.bitLength(), rnd);
-		eccdhKeyPair.setPrivateKey(Base64.getEncoder().encodeToString(d.toByteArray()));
-		
-		PointEC javniKljuc = ECCArithmetic.mul(d, pointG, a, b, p);
-		eccdhKeyPair.setPublicKeyPoint(javniKljuc);
+		do {
+			BigInteger d = new BigInteger(n.bitLength(), rnd);
+			eccdhKeyPair.setPrivateKey(Base64.getEncoder().encodeToString(d.toByteArray()));
+			
+			PointEC javniKljuc = ECCArithmetic.mul(d, pointG, a, b, p);
+			eccdhKeyPair.setPublicKeyPoint(javniKljuc);
+		}while(!eccdhKeyPair.getPublicKeyPoint().isOnCurve());
 		
 		return eccdhKeyPair;
 	}
 	
 	public static PointEC pointG(int bits, BigInteger p) {
-		uG = uG.substring(2);
-		BigInteger x = new BigInteger(uG.substring(0, Math.min(uG.length(), bits*8)), 16);
-		BigInteger y = new BigInteger(uG.substring(bits * 8), 16);
+		String substringUG = uG.substring(2);
+		BigInteger x = new BigInteger(substringUG.substring(0, Math.min(substringUG.length(), bits*8)), 16);
+		BigInteger y = new BigInteger(substringUG.substring(bits * 8), 16);
 		PointEC pointEC = new PointEC(x, y, a, b, p);
-
 		return pointEC;
 	}
 }
