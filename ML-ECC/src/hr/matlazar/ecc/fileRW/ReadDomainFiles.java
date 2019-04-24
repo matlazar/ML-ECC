@@ -17,20 +17,25 @@ public class ReadDomainFiles {
 		String line = null;
 		String m = null;
 		String ss = null;
+		String ss1 = null;
 		 try {
 
 	            FileReader fileReader = new FileReader(file);
 
 	            BufferedReader bufferedReader = new BufferedReader(fileReader);
-	            int readCunt = 2;
+	            int readCunt = 3;
 	            while((line = bufferedReader.readLine()) != null) {
 	                switch (readCunt) {
-					case 2:
+					case 3:
 						m = line;
 						readCunt--;
 						break;
-					case 1:
+					case 2:
 						ss = line;
+						readCunt--;
+						break;
+					case 1:
+						ss1 = line;
 						readCunt--;
 						break;
 					default:
@@ -39,7 +44,9 @@ public class ReadDomainFiles {
 	            }   
 	            
 	            keyDomain.setMessage(m);
-	            keyDomain.setSharedSecret(ss);
+	            keyDomain.getSharedSecret().setX(new BigInteger(ss));
+	            keyDomain.getSharedSecret().setY(new BigInteger(ss1));
+	            
 
 	            bufferedReader.close();         
 	        }

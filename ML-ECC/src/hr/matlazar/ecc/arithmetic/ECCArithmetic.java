@@ -5,10 +5,6 @@ import java.util.function.BiFunction;
 
 public class ECCArithmetic {
 
-
-	
-	
-
 	public static PointEC add(PointEC t1, PointEC t2, BigInteger a, BigInteger b, BigInteger p) {
 		BigInteger lambda = null;
 		BigInteger x1 = null;

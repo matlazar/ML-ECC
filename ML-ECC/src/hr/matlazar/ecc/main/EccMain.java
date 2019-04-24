@@ -14,6 +14,7 @@ import hr.matlazar.ecc.constants.DomainParameters;
 import hr.matlazar.ecc.constants.FileName;
 import hr.matlazar.ecc.domains.ECCDHKeyPair;
 import hr.matlazar.ecc.domains.ECDSASignature;
+import hr.matlazar.ecc.domains.ECECIESMessage;
 import hr.matlazar.ecc.domains.ECIESMessage;
 import hr.matlazar.ecc.domains.ElGamalSend;
 import hr.matlazar.ecc.domains.KeyDomain;
@@ -123,16 +124,46 @@ public class EccMain {
 //		}
 //		
 //		sc.close();
-		DiffieHellman diffieHellman = new DiffieHellman("secp192k1");
+//		DiffieHellman diffieHellman = new DiffieHellman("secp192k1");
+//		KeyGenerator keyGenerator = new KeyGenerator("secp192k1");
+//		ECCDHKeyPair Alice = keyGenerator.ECDHGenerateKeys();
+//		ECCDHKeyPair Bob = keyGenerator.ECDHGenerateKeys();
+//		
+//		
+//		PointEC ss1 = diffieHellman.sharedSecret(Bob.getPublicKeyPoint(), Alice.getPrivateKey());
+//		PointEC ss2 = diffieHellman.sharedSecret(Alice.getPublicKeyPoint(), Bob.getPrivateKey());
+//		
+//		System.out.println(diffieHellman.verify(ss1, ss2));
+//		
+//		KeyGenerator keyGenerator = new KeyGenerator("secp192k1");
+//		ECCDHKeyPair Alice = keyGenerator.ECDHGenerateKeys();
+//		
+//		ECDSA ecdsa = new ECDSA("secp192k1");
+//		
+//		ECDSASignature ecdsaSignature =  ecdsa.ecECDSASignMessage("Marko", Alice.getPrivateKey());
+//		System.out.println(ecdsaSignature.getMessage() + " " + ecdsaSignature.getR() + " " + ecdsaSignature.getS());
+//		System.out.println("-------------------------------------------------------------------------------------");
+//		System.out.println(ecdsa.ecDehashString(ecdsaSignature, Alice.getPublicKeyPoint()));
+		
 		KeyGenerator keyGenerator = new KeyGenerator("secp192k1");
 		ECCDHKeyPair Alice = keyGenerator.ECDHGenerateKeys();
-		ECCDHKeyPair Bob = keyGenerator.ECDHGenerateKeys();
 		
+//		ECES eces = new ECES("secp192k1");
+//		
+//		KeyDomain keyDomain = eces.encrypt(Alice.getPublicKeyPoint(), "Nataša");
+//		
+//		System.out.println(keyDomain.getMessage());
+//		
+//		System.out.println("-------------------------");
+//		
+//		System.out.println(eces.decrypt(keyDomain, Alice.getPrivateKey()));
 		
-		PointEC ss1 = diffieHellman.sharedSecret(Bob.getPublicKeyPoint(), Alice.getPrivateKey());
-		PointEC ss2 = diffieHellman.sharedSecret(Alice.getPublicKeyPoint(), Bob.getPrivateKey());
+		ECIES ecies = new ECIES("secp192k1");
+		ECECIESMessage ececiesMessage = ecies.ecEncryptECIES("Matija je prezakon jer navija za Man Utd", Alice.getPublicKeyPoint());
+		System.out.println(ececiesMessage.getMessage());
+		System.out.println("---------------------------------------------------------");
+		System.out.println(ecies.ecDecrypt(ececiesMessage, Alice.getPrivateKey()));
 		
-		System.out.println(diffieHellman.verify(ss1, ss2));
 	}
 
 }
