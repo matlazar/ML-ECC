@@ -124,7 +124,7 @@ public class KeyGenerator {
 		keyPair.setPrivateKey(Base64.getEncoder().encodeToString(d.toByteArray()));
 		WriteFile.write(filePrivate, Base64.getEncoder().encodeToString(d.toByteArray()));
 		
-		BigInteger Q = d.multiply(g).mod(p);
+		BigInteger Q = d.multiply(g);
 		keyPair.setPublicKey(Base64.getEncoder().encodeToString(Q.toByteArray()));
 		WriteFile.write(filePublic, Base64.getEncoder().encodeToString(Q.toByteArray()));	
 		
