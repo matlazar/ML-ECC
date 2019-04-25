@@ -10,8 +10,6 @@ public class Algoritham {
 	public Algoritham() {
 		algoritham.add("El-Gamal");
 		algoritham.add("ECIES");
-		algoritham.add("ECES");
-		algoritham.add("ECIES-ECC");
 	}
 	
 	public List<String> getAlgoritham() {
