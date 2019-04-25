@@ -10,10 +10,10 @@ import hr.matlazar.ecc.constants.DomainParameters;
 public class DiffieHellman {
 
 	
-	public BigInteger g;
-	public BigInteger p;
-	public BigInteger a;
-	public BigInteger b;
+	public static BigInteger g;
+	public static BigInteger p;
+	public static BigInteger a;
+	public static BigInteger b;
 	
 	
 	
@@ -108,8 +108,11 @@ public class DiffieHellman {
 		return ss;
 	}
 	
-	public boolean verify(PointEC ss1, PointEC ss2) {
-		
+	public static boolean verify(String ss_1, String ss_2) {
+		String[] cooridantes1 = ss_1.split("-");
+		String[] cooridantes2 = ss_2.split("-");
+		PointEC ss1 = new PointEC(new BigInteger(cooridantes1[0]), new BigInteger(cooridantes1[1]), a, b, p);
+		PointEC ss2 = new PointEC(new BigInteger(cooridantes2[0]), new BigInteger(cooridantes1[1]), a, b, p);
 		if(ss1.getX().equals(ss2.getX()) && ss1.getY().equals(ss2.getY())) {
 			return true;
 		}else {

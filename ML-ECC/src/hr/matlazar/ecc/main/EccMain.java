@@ -124,8 +124,8 @@ public class EccMain {
 //		}
 //		
 //		sc.close();
-//		DiffieHellman diffieHellman = new DiffieHellman("secp192k1");
-//		KeyGenerator keyGenerator = new KeyGenerator("secp192k1");
+//		DiffieHellman diffieHellman = new DiffieHellman("secp256k1");
+//		KeyGenerator keyGenerator = new KeyGenerator("secp256k1");
 //		ECCDHKeyPair Alice = keyGenerator.ECDHGenerateKeys();
 //		ECCDHKeyPair Bob = keyGenerator.ECDHGenerateKeys();
 //		
@@ -144,25 +144,25 @@ public class EccMain {
 //		System.out.println(ecdsaSignature.getMessage() + " " + ecdsaSignature.getR() + " " + ecdsaSignature.getS());
 //		System.out.println("-------------------------------------------------------------------------------------");
 //		System.out.println(ecdsa.ecDehashString(ecdsaSignature, Alice.getPublicKeyPoint()));
-		
-		KeyGenerator keyGenerator = new KeyGenerator("secp192k1");
+//		
+		KeyGenerator keyGenerator = new KeyGenerator("secp256k1");
 		ECCDHKeyPair Alice = keyGenerator.ECDHGenerateKeys();
 		
-//		ECES eces = new ECES("secp192k1");
-//		
-//		KeyDomain keyDomain = eces.encrypt(Alice.getPublicKeyPoint(), "Nataša");
-//		
-//		System.out.println(keyDomain.getMessage());
-//		
-//		System.out.println("-------------------------");
-//		
-//		System.out.println(eces.decrypt(keyDomain, Alice.getPrivateKey()));
+		ECES eces = new ECES("secp256k1");
 		
-		ECIES ecies = new ECIES("secp192k1");
-		ECECIESMessage ececiesMessage = ecies.ecEncryptECIES("Matija je prezakon jer navija za Man Utd", Alice.getPublicKeyPoint());
-		System.out.println(ececiesMessage.getMessage());
-		System.out.println("---------------------------------------------------------");
-		System.out.println(ecies.ecDecrypt(ececiesMessage, Alice.getPrivateKey()));
+		KeyDomain keyDomain = eces.encrypt(Alice.getPublicKeyPoint(), "Nataša");
+		
+		System.out.println(keyDomain.getMessage());
+		
+		System.out.println("-------------------------");
+		
+		System.out.println(eces.decrypt(keyDomain, Alice.getPrivateKey()));
+		
+//		ECIES ecies = new ECIES("secp256k1");
+//		ECECIESMessage ececiesMessage = ecies.ecEncryptECIES("Matija je prezakon jer navija za Man Utd", Alice.getPublicKeyPoint());
+//		System.out.println(ececiesMessage.getMessage());
+//		System.out.println("---------------------------------------------------------");
+//		System.out.println(ecies.ecDecrypt(ececiesMessage, Alice.getPrivateKey()));
 		
 	}
 
