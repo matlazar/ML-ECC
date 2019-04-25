@@ -13,6 +13,8 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.Border;
 
 import hr.matlazar.ecc.algoritams.DiffieHellman;
+import hr.matlazar.ecc.arithmetic.PointEC;
+import hr.matlazar.ecc.domains.ECCDHKeyPair;
 import hr.matlazar.ecc.domains.KeyPair;
 import hr.matlazar.ecc.fileRW.ClearFile;
 import hr.matlazar.ecc.fileRW.ReadFile;
@@ -20,6 +22,7 @@ import hr.matlazar.ecc.fileRW.ReadKey;
 import hr.matlazar.ecc.fileRW.WriteFile;
 import hr.matlazar.ecc.keyGenerator.KeyGenerator;
 import hr.matlazar.swing.buttonAction.GenerateKeys;
+import hr.matlazar.swing.comboBox.DHType;
 import hr.matlazar.swing.comboBox.KeySize;
 
 import javax.swing.JLabel;
@@ -73,9 +76,13 @@ public class DiffieHellmanWindow {
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage("pictures\\iconLock.png"));
 		Border border = BorderFactory.createLineBorder(Color.BLACK);
 		KeySize keySize = new KeySize();
+		DHType dhType = new DHType();
 		
 		JComboBox keyLength = new JComboBox(keySize.getKeySize().toArray());
 		keyLength.setBounds(378, 11, 181, 20);
+		
+		JComboBox eccDlpCbx = new JComboBox(dhType.getDhType().toArray());
+		eccDlpCbx.setBounds(378, 41, 181, 20);
 		
 		JPanel alicePanel = new JPanel();
 		alicePanel.setBounds(0, 0, 329, 714);
@@ -117,11 +124,19 @@ public class DiffieHellmanWindow {
 		JButton btnKeysBob = new JButton("Izgeneriraj klju\u010Deve");
 		btnKeysBob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				KeyPair keyPair = GenerateKeys.getDHKey(keyLength.getSelectedItem().toString());
-				WriteFile.writePublicKeys(new File("files/publicKeys.txt"), keyPair.getPublicKey() ,"Bob");
-				WriteFile.write(new File("files/bobPrivateKey.txt"), keyPair.getPrivateKey());
-				txtAreaPrivateBob.setText(keyPair.getPrivateKey());
-				txtAreaPublicBob.setText(keyPair.getPublicKey());
+				if(eccDlpCbx.getSelectedItem().toString().equals("Compressed-Diffie-Helman")) {
+					KeyPair keyPair = GenerateKeys.getDHKey(keyLength.getSelectedItem().toString());
+					WriteFile.writePublicKeys(new File("files/publicKeys.txt"), keyPair.getPublicKey() ,"Bob");
+					WriteFile.write(new File("files/bobPrivateKey.txt"), keyPair.getPrivateKey());
+					txtAreaPrivateBob.setText(keyPair.getPrivateKey());
+					txtAreaPublicBob.setText(keyPair.getPublicKey());
+				}else {
+					ECCDHKeyPair keyPair = GenerateKeys.getECCDHKey(keyLength.getSelectedItem().toString());
+					WriteFile.writePublicKeys(new File("files/publicKeys.txt"), keyPair.getPublicKeyPoint().getX()+"-"+keyPair.getPublicKeyPoint().getY(), "Bob");
+					WriteFile.write(new File("files/bobPrivateKey.txt"), keyPair.getPrivateKey());
+					txtAreaPrivateBob.setText(keyPair.getPrivateKey());
+					txtAreaPublicBob.setText( keyPair.getPublicKeyPoint().getX()+"-"+keyPair.getPublicKeyPoint().getY());
+				}
 			}
 		});
 		
@@ -154,10 +169,21 @@ public class DiffieHellmanWindow {
 		JButton btnBobGenerateSS = new JButton("Izgeneriraj zajedni\u010Dku tajnu");
 		btnBobGenerateSS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String alicePublicKey = ReadFile.getPublicKey(new File("files/publicKeys.txt"), "Alice");
-				String bobPrivateKey = ReadKey.read(new File("files/bobPrivateKey.txt"));
-				DiffieHellman dh = new DiffieHellman(keyLength.getSelectedItem().toString());
-				txtSSBob.setText(dh.computeSharedSecret(alicePublicKey, bobPrivateKey));
+				if(eccDlpCbx.getSelectedItem().toString().equals("Compressed-Diffie-Helman")) {
+					String alicePublicKey = ReadFile.getPublicKey(new File("files/publicKeys.txt"), "Alice");
+					String bobPrivateKey = ReadKey.read(new File("files/bobPrivateKey.txt"));
+					DiffieHellman dh = new DiffieHellman(keyLength.getSelectedItem().toString());
+					txtSSBob.setText(dh.computeSharedSecret(alicePublicKey, bobPrivateKey));
+				} else {
+					String[] coordinates = ReadFile.getPublicKey(new File("files/publicKeys.txt"), "Alice").split("-");
+					BigInteger x = new BigInteger(coordinates[0]);
+					BigInteger y = new BigInteger(coordinates[1]);
+					String bobPrivateKey = ReadKey.read(new File("files/bobPrivateKey.txt"));
+					DiffieHellman dh = new DiffieHellman(keyLength.getSelectedItem().toString());
+					PointEC alicePublicKey = new PointEC(x, y, dh.a, dh.b, dh.p);
+					PointEC ss = dh.sharedSecret(alicePublicKey, bobPrivateKey);
+					txtSSBob.setText(ss.getX() + "-" + ss.getY());
+				}
 			}
 		});
 		
@@ -168,18 +194,17 @@ public class DiffieHellmanWindow {
 					.addContainerGap()
 					.addGroup(gl_bobPanel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_bobPanel.createSequentialGroup()
-							.addGroup(gl_bobPanel.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_bobPanel.createParallelGroup(Alignment.TRAILING)
-									.addComponent(labelBob, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-									.addComponent(txtAreaPrivateBob, GroupLayout.PREFERRED_SIZE, 309, GroupLayout.PREFERRED_SIZE)
-									.addComponent(txtAreaPublicBob, GroupLayout.PREFERRED_SIZE, 309, GroupLayout.PREFERRED_SIZE)
-									.addGroup(gl_bobPanel.createSequentialGroup()
-										.addComponent(btnKeysBob, GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(btnUcitajKljuceveBob, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE))
-									.addComponent(txtGetAliceKey, GroupLayout.PREFERRED_SIZE, 309, GroupLayout.PREFERRED_SIZE))
-								.addGroup(Alignment.TRAILING, gl_bobPanel.createSequentialGroup()
-									.addComponent(lblSharedSecretBob, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addGroup(gl_bobPanel.createParallelGroup(Alignment.TRAILING)
+								.addComponent(labelBob, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
+								.addComponent(txtAreaPrivateBob, GroupLayout.PREFERRED_SIZE, 309, GroupLayout.PREFERRED_SIZE)
+								.addComponent(txtAreaPublicBob, GroupLayout.PREFERRED_SIZE, 309, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_bobPanel.createSequentialGroup()
+									.addComponent(btnKeysBob, GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnUcitajKljuceveBob, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE))
+								.addComponent(txtGetAliceKey, GroupLayout.PREFERRED_SIZE, 309, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_bobPanel.createSequentialGroup()
+									.addComponent(lblSharedSecretBob, GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
 									.addPreferredGap(ComponentPlacement.UNRELATED)
 									.addComponent(btnBobGenerateSS, GroupLayout.PREFERRED_SIZE, 197, GroupLayout.PREFERRED_SIZE))
 								.addComponent(txtSSBob, GroupLayout.PREFERRED_SIZE, 309, GroupLayout.PREFERRED_SIZE)
@@ -187,7 +212,7 @@ public class DiffieHellmanWindow {
 								.addComponent(lblPublicKeyBob, GroupLayout.PREFERRED_SIZE, 123, GroupLayout.PREFERRED_SIZE))
 							.addContainerGap())
 						.addGroup(gl_bobPanel.createSequentialGroup()
-							.addComponent(lblPrivateKeyBob, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(lblPrivateKeyBob, GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
 							.addGap(171))))
 		);
 		gl_bobPanel.setVerticalGroup(
@@ -210,10 +235,13 @@ public class DiffieHellmanWindow {
 					.addComponent(lblAlicesPublicKey)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(txtGetAliceKey, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_bobPanel.createParallelGroup(Alignment.TRAILING)
-						.addComponent(btnBobGenerateSS)
-						.addComponent(lblSharedSecretBob))
+					.addGroup(gl_bobPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_bobPanel.createSequentialGroup()
+							.addGap(20)
+							.addComponent(lblSharedSecretBob))
+						.addGroup(gl_bobPanel.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnBobGenerateSS)))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(txtSSBob, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(64, Short.MAX_VALUE))
@@ -262,11 +290,19 @@ public class DiffieHellmanWindow {
 		JButton btnKeysAlice = new JButton("Izgeneriraj klju\u010Deve");
 		btnKeysAlice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				KeyPair keyPair = GenerateKeys.getDHKey(keyLength.getSelectedItem().toString());
-				WriteFile.writePublicKeys(new File("files/publicKeys.txt"), keyPair.getPublicKey() ,"Alice");
-				WriteFile.write(new File("files/alicePrivateKey.txt"), keyPair.getPrivateKey());
-				txtAreaPrivateAlice.setText(keyPair.getPrivateKey());
-				txtAreaPublicAlice.setText(keyPair.getPublicKey());
+				if(eccDlpCbx.getSelectedItem().toString().equals("Compressed-Diffie-Helman")) {
+					KeyPair keyPair = GenerateKeys.getDHKey(keyLength.getSelectedItem().toString());
+					WriteFile.writePublicKeys(new File("files/publicKeys.txt"), keyPair.getPublicKey() ,"Alice");
+					WriteFile.write(new File("files/alicePrivateKey.txt"), keyPair.getPrivateKey());
+					txtAreaPrivateAlice.setText(keyPair.getPrivateKey());
+					txtAreaPublicAlice.setText(keyPair.getPublicKey());
+				}else {
+					ECCDHKeyPair keyPair = GenerateKeys.getECCDHKey(keyLength.getSelectedItem().toString());
+					WriteFile.writePublicKeys(new File("files/publicKeys.txt"), keyPair.getPublicKeyPoint().getX()+"-"+keyPair.getPublicKeyPoint().getY(), "Alice");
+					WriteFile.write(new File("files/alicePrivateKey.txt"), keyPair.getPrivateKey());
+					txtAreaPrivateAlice.setText(keyPair.getPrivateKey());
+					txtAreaPublicAlice.setText( keyPair.getPublicKeyPoint().getX()+"-"+keyPair.getPublicKeyPoint().getY());
+				}
 			}
 		});
 		
@@ -293,10 +329,21 @@ public class DiffieHellmanWindow {
 		JButton btnAliceGenerateSS = new JButton("Izgeneriraj zajedni\u010Dku tajnu");
 		btnAliceGenerateSS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String bobPublicKey = ReadFile.getPublicKey(new File("files/publicKeys.txt"), "Bob");
-				String alicePrivateKey = ReadKey.read(new File("files/alicePrivateKey.txt"));
-				DiffieHellman dh = new DiffieHellman(keyLength.getSelectedItem().toString());
-				txtSSAlice.setText(dh.computeSharedSecret(bobPublicKey, alicePrivateKey));
+				if(eccDlpCbx.getSelectedItem().toString().equals("Compressed-Diffie-Helman")) {
+					String bobPublicKey = ReadFile.getPublicKey(new File("files/publicKeys.txt"), "Bob");
+					String alicePrivateKey = ReadKey.read(new File("files/alicePrivateKey.txt"));
+					DiffieHellman dh = new DiffieHellman(keyLength.getSelectedItem().toString());
+					txtSSAlice.setText(dh.computeSharedSecret(bobPublicKey, alicePrivateKey));
+				} else {
+					String[] coordinates = ReadFile.getPublicKey(new File("files/publicKeys.txt"), "Bob").split("-");
+					BigInteger x = new BigInteger(coordinates[0]);
+					BigInteger y = new BigInteger(coordinates[1]);
+					String alicePrivateKey = ReadKey.read(new File("files/alicePrivateKey.txt"));
+					DiffieHellman dh = new DiffieHellman(keyLength.getSelectedItem().toString());
+					PointEC bobPublicKey = new PointEC(x, y, dh.a, dh.b, dh.p);
+					PointEC ss = dh.sharedSecret(bobPublicKey, alicePrivateKey);
+					txtSSAlice.setText(ss.getX() + "-" + ss.getY());
+				}
 			}
 		});
 		frame.getContentPane().setLayout(null);
@@ -364,6 +411,7 @@ public class DiffieHellmanWindow {
 		alicePanel.setLayout(gl_alicePanel);
 		frame.getContentPane().add(alicePanel);
 		frame.getContentPane().add(keyLength);
+		frame.getContentPane().add(eccDlpCbx);
 		frame.getContentPane().add(btnSendAliceKey);
 		frame.getContentPane().add(btnPodaljiBobuJavni);
 		frame.getContentPane().add(bobPanel);
@@ -381,16 +429,25 @@ public class DiffieHellmanWindow {
 			public void actionPerformed(ActionEvent e) {
 				String sSAlice = txtSSAlice.getText();
 				String sSBob = txtSSBob.getText();
-				BigInteger sSAliceNumber = new BigInteger(Base64.getDecoder().decode(sSAlice.getBytes()));
-				BigInteger sSBobNumber = new BigInteger(Base64.getDecoder().decode(sSBob.getBytes()));
-				String txtOutput = "Number Alice: " + sSAliceNumber + "\n ==> Number Bob: " + sSBobNumber;
-				validationArea.setText(txtOutput);
-				if(DiffieHellman.verifySharedSecert(sSAlice, sSBob)) {
-					btnValidation.setBackground(Color.GREEN);
-				}else {
-					btnValidation.setBackground(Color.RED);
+				if(eccDlpCbx.getSelectedItem().toString().equals("Compressed-Diffie-Helman")) {
+					BigInteger sSAliceNumber = new BigInteger(Base64.getDecoder().decode(sSAlice.getBytes()));
+					BigInteger sSBobNumber = new BigInteger(Base64.getDecoder().decode(sSBob.getBytes()));
+					String txtOutput = "Number Alice: " + sSAliceNumber + "\n ==> Number Bob: " + sSBobNumber;
+					validationArea.setText(txtOutput);
+					if(DiffieHellman.verifySharedSecert(sSAlice, sSBob)) {
+						btnValidation.setBackground(Color.GREEN);
+					}else {
+						btnValidation.setBackground(Color.RED);
+					}
+				} else {
+					String txtOutput = "Point Alice: " + sSAlice + "\n ==> Point Bob: " + sSBob;
+					validationArea.setText(txtOutput);
+					if(DiffieHellman.verify(sSAlice, sSBob)) {
+						btnValidation.setBackground(Color.GREEN);
+					}else {
+						btnValidation.setBackground(Color.RED);
+					}
 				}
-				
 			}
 		});
 		btnValidation.setBounds(423, 332, 95, 23);
@@ -416,5 +473,7 @@ public class DiffieHellmanWindow {
 		});
 		btnResetiraj.setBounds(423, 362, 95, 23);
 		frame.getContentPane().add(btnResetiraj);
+		
+		
 	}
 }
