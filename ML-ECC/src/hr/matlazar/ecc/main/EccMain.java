@@ -38,25 +38,25 @@ public class EccMain {
 		
 		System.out.println("----------------------------------------------------------------------\n");
 		
-		System.out.println("-----------------------------ECES---------------------------------\n");
-		ECES eces = new ECES("secp192k1");
-		System.out.println(" Unesi tekst() ECES: ");
-		KeyDomain keyDomain = eces.encrypt(keyPair.getPublicKey(), sc.nextLine());
-		System.out.println("Encryption: " + keyDomain.getMessage() + "\n");
-		System.out.println("Decryption: " + eces.decrypt(keyDomain, keyPair.getPrivateKey()));
-		System.out.println("------------------------------------------------------------------\n");
-		
-		System.out.println("----------------------------ElGamal-------------------------------\n");
-		
-		ElGamal elGamal = new ElGamal(DomainParameters.secp192k1);
-		System.out.println(" Unesi tekst() ElGamal: ");
-		ElGamalSend egs = elGamal.encrypt(keyPair.getPublicKey(), sc.nextLine());
-
-		System.out.println("Encrypt: " + egs.getSharedSecret()  + "\n");
-		String decrypt = elGamal.decrypt(egs, keyPair.getPrivateKey());
-		System.out.println("Decrypt: " + decrypt + "\n");
-		System.out.println("------------------------------------------------------------------\n");
-		
+//		System.out.println("-----------------------------ECES---------------------------------\n");
+//		ECES eces = new ECES("secp192k1");
+//		System.out.println(" Unesi tekst() ECES: ");
+//		KeyDomain keyDomain = eces.encrypt(keyPair.getPublicKey(), sc.nextLine());
+//		System.out.println("Encryption: " + keyDomain.getMessage() + "\n");
+//		System.out.println("Decryption: " + eces.decrypt(keyDomain, keyPair.getPrivateKey()));
+//		System.out.println("------------------------------------------------------------------\n");
+//		
+//		System.out.println("----------------------------ElGamal-------------------------------\n");
+//		
+//		ElGamal elGamal = new ElGamal(DomainParameters.secp192k1);
+//		System.out.println(" Unesi tekst() ElGamal: ");
+//		ElGamalSend egs = elGamal.encrypt(keyPair.getPublicKey(), sc.nextLine());
+//
+//		System.out.println("Encrypt: " + egs.getSharedSecret()  + "\n");
+//		String decrypt = elGamal.decrypt(egs, keyPair.getPrivateKey());
+//		System.out.println("Decrypt: " + decrypt + "\n");
+//		System.out.println("------------------------------------------------------------------\n");
+//		
 		
 		System.out.println("--------------------------Diffie-Helman---------------------------\n");
 		
