@@ -145,18 +145,18 @@ public class EccMain {
 //		System.out.println("-------------------------------------------------------------------------------------");
 //		System.out.println(ecdsa.ecDehashString(ecdsaSignature, Alice.getPublicKeyPoint()));
 //		
-		KeyGenerator keyGenerator = new KeyGenerator("secp256k1");
-		ECCDHKeyPair Alice = keyGenerator.ECDHGenerateKeys();
-		
-		ECES eces = new ECES("secp256k1");
-		
-		KeyDomain keyDomain = eces.encrypt(Alice.getPublicKeyPoint(), "Nataša");
-		
-		System.out.println(keyDomain.getMessage());
-		
-		System.out.println("-------------------------");
-		
-		System.out.println(eces.decrypt(keyDomain, Alice.getPrivateKey()));
+//		KeyGenerator keyGenerator = new KeyGenerator("secp256k1");
+//		ECCDHKeyPair Alice = keyGenerator.ECDHGenerateKeys();
+//		
+//		ECES eces = new ECES("secp256k1");
+//		
+//		KeyDomain keyDomain = eces.encrypt(Alice.getPublicKeyPoint(), "Nataša");
+//		
+//		System.out.println(keyDomain.getMessage());
+//		
+//		System.out.println("-------------------------");
+//		
+//		System.out.println(eces.decrypt(keyDomain, Alice.getPrivateKey()));
 		
 //		ECIES ecies = new ECIES("secp256k1");
 //		ECECIESMessage ececiesMessage = ecies.ecEncryptECIES("Matija je prezakon jer navija za Man Utd", Alice.getPublicKeyPoint());

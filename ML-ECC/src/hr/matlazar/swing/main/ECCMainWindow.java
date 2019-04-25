@@ -18,6 +18,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import hr.matlazar.ecc.algoritams.ECDSA;
 import hr.matlazar.ecc.algoritams.ECIES;
 import hr.matlazar.ecc.algoritams.ElGamal;
+import hr.matlazar.ecc.domains.ECCDHKeyPair;
 import hr.matlazar.ecc.domains.ECDSASignature;
 import hr.matlazar.ecc.domains.ECIESMessage;
 import hr.matlazar.ecc.domains.ElGamalSend;
@@ -158,9 +159,15 @@ public class ECCMainWindow {
 		JButton btnKeyGenerator = new JButton("Izgeneriraj klju\u010Deve");
 		btnKeyGenerator.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				KeyPair keyPair = GenerateKeys.getKeys(keyLength.getSelectedItem().toString());
-				txtPrivateKey.setText(keyPair.getPrivateKey());
-				txtPubicKey.setText(keyPair.getPublicKey());				
+				if(algorithamBox.getSelectedItem().toString().equals("El-Gamal") || algorithamBox.getSelectedItem().toString().equals("ECIES")) {
+					KeyPair keyPair = GenerateKeys.getKeys(keyLength.getSelectedItem().toString());
+					txtPrivateKey.setText(keyPair.getPrivateKey());
+					txtPubicKey.setText(keyPair.getPublicKey());				
+				} else {
+					ECCDHKeyPair keyPair = GenerateKeys.getECCDHKey(keyLength.getSelectedItem().toString());
+					txtPrivateKey.setText(keyPair.getPrivateKey());
+					txtPubicKey.setText(keyPair.getPublicKeyPoint().getX() + "-" + keyPair.getPublicKeyPoint().getY());
+				}
 			}
 		});
 		

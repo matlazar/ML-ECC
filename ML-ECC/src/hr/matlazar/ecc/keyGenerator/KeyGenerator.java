@@ -148,14 +148,17 @@ public class KeyGenerator {
 		
 		ECCDHKeyPair eccdhKeyPair = new ECCDHKeyPair();
 		PointEC pointG = pointG(bits, p);
+		BigInteger d = null;
+		PointEC javniKljuc = null;
 		do {
-			BigInteger d = new BigInteger(n.bitLength(), rnd);
+			d = new BigInteger(n.bitLength(), rnd);
 			eccdhKeyPair.setPrivateKey(Base64.getEncoder().encodeToString(d.toByteArray()));
 			
-			PointEC javniKljuc = ECCArithmetic.mul(d, pointG, a, b, p);
+			javniKljuc = ECCArithmetic.mul(d, pointG, a, b, p);
 			eccdhKeyPair.setPublicKeyPoint(javniKljuc);
 		}while(!eccdhKeyPair.getPublicKeyPoint().isOnCurve());
-		
+		WriteFile.write(filePrivate, Base64.getEncoder().encodeToString(d.toByteArray()));
+		WriteFile.write(filePublic, eccdhKeyPair.getPublicKeyPoint().getX() + "-" + eccdhKeyPair.getPublicKeyPoint().getY());
 		return eccdhKeyPair;
 	}
 	
