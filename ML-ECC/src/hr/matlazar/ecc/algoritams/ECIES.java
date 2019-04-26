@@ -16,6 +16,7 @@ import hr.matlazar.ecc.symetricAlgorithams.AES;
 public class ECIES {
 	
 	File file = new File("files/ecies.txt");
+	File ecFile = new File("files/ecEcies.txt");
 	
 	BigInteger p = new BigInteger(DomainParameters.secp192k1_p.replaceAll(" ", ""), 16);
 	BigInteger n = new BigInteger(DomainParameters.secp192k1_n.replaceAll(" ", ""), 16);
@@ -167,7 +168,7 @@ public class ECIES {
 		
 		ececiesMessage.setR(R);
 		
-		//WriteFile.write(file, ececiesMessage.getMessage(), ececiesMessage.getR());
+		WriteFile.write(ecFile, ececiesMessage.getMessage(), ececiesMessage.getR().getX() + "-" + ececiesMessage.getR().getY());
 		
 		return ececiesMessage;
 	}
@@ -176,9 +177,9 @@ public class ECIES {
 		
 		BigInteger dA = new BigInteger(Base64.getDecoder().decode(privateKey));
 		
-		//BigInteger R = new BigInteger(Base64.getDecoder().decode(eciesMessage.getR()));
+		PointEC R = ececiesMessage.getR();
 		
-		PointEC S = ECCArithmetic.mul(dA, ececiesMessage.getR(), a, b, p);
+		PointEC S = ECCArithmetic.mul(dA, R, a, b, p);
 		
 		String decrypt = AES.decrypt(ececiesMessage.getMessage(), Base64.getEncoder().encodeToString(S.getX().toByteArray()));
 		

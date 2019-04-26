@@ -17,6 +17,8 @@ public class ReadFile {
 			return ReadElGamalSend.readElGamalSend(file);
 		case "ReadKeyFile":
 			return ReadKey.read(file);
+		case "ReadEcECIESFile":
+			return ReadEcECIESFile.readECIESMessage(file);
 		default:
 			return null;
 		}

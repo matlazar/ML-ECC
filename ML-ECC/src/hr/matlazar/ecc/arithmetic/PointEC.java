@@ -8,6 +8,12 @@ public class PointEC {
 	private BigInteger y;
 	private boolean onCurve;
 	
+	public PointEC (BigInteger x, BigInteger y, boolean onCurve) {
+		this.x = x;
+		this.y = y;
+		this.onCurve = onCurve;
+	}
+	
 	public PointEC(BigInteger x, BigInteger y, BigInteger a, BigInteger b, BigInteger p) {
 		super();
 		this.x = x;

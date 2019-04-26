@@ -18,8 +18,10 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import hr.matlazar.ecc.algoritams.ECDSA;
 import hr.matlazar.ecc.algoritams.ECIES;
 import hr.matlazar.ecc.algoritams.ElGamal;
+import hr.matlazar.ecc.arithmetic.PointEC;
 import hr.matlazar.ecc.domains.ECCDHKeyPair;
 import hr.matlazar.ecc.domains.ECDSASignature;
+import hr.matlazar.ecc.domains.ECECIESMessage;
 import hr.matlazar.ecc.domains.ECIESMessage;
 import hr.matlazar.ecc.domains.ElGamalSend;
 import hr.matlazar.ecc.domains.KeyPair;
@@ -44,6 +46,7 @@ import javax.swing.border.Border;
 import java.awt.SystemColor;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.math.BigInteger;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.awt.event.ActionEvent;
@@ -186,12 +189,22 @@ public class ECCMainWindow {
 						elGamal.encrypt(ReadKey.read(file), txtToEncryt.getText());
 						ElGamalSend elGamalSend = (ElGamalSend) ReadFile.readFile(elgamal, "ElGamal");
 						encryptedText.setText(elGamalSend.getSharedSecret());
-					} else {
+					} else if(algorithamBox.getSelectedItem().toString().equals("ECIES")) {
 						File eciesFile = new File("files/ecies.txt");
 						ECIES ecies = new ECIES(keyLength.getSelectedItem().toString());
 						ecies.encryptECIES(txtToEncryt.getText(), ReadKey.read(file));
 						ECIESMessage eciesMessage = (ECIESMessage) ReadFile.readFile(eciesFile, "ECIES");
 						encryptedText.setText(eciesMessage.getMessage());
+					} else if(algorithamBox.getSelectedItem().toString().equals("ECES")) {
+						
+					} else {
+						File ecFile = new File("files/ecEcies.txt");
+						ECIES ecies = new ECIES(keyLength.getSelectedItem().toString());
+						String[] coordinates = ReadKey.read(file).split("-");
+						PointEC pointEC =  new PointEC(new BigInteger(coordinates[0]), new BigInteger(coordinates[1]), true);
+						ecies.ecEncryptECIES(txtToEncryt.getText(), pointEC);
+						ECECIESMessage ececiesMessage = (ECECIESMessage) ReadFile.readFile(ecFile, "ReadEcECIESFile");
+						encryptedText.setText(ececiesMessage.getMessage());
 					}
 				}
 			}
@@ -210,11 +223,18 @@ public class ECCMainWindow {
 						ElGamal elGamal = new ElGamal(keyLength.getSelectedItem().toString());
 						ElGamalSend elGamalSend = (ElGamalSend) ReadFile.readFile(elgamal, "ElGamal");
 						decryptedText.setText(elGamal.decrypt(elGamalSend, ReadKey.read(file)));
-					} else {
+					} else if(algorithamBox.getSelectedItem().toString().equals("ECIES")) {
 						File eciesFile = new File("files/ecies.txt");
 						ECIES ecies = new ECIES(keyLength.getSelectedItem().toString());
 						ECIESMessage eciesMessage = (ECIESMessage) ReadFile.readFile(eciesFile, "ECIES");
 						decryptedText.setText(ecies.decrypt(eciesMessage, ReadKey.read(file)));
+					} else if(algorithamBox.getSelectedItem().toString().equals("ECES")) {
+						
+					} else {
+						File ecFile = new File("files/ecEcies.txt");
+						ECIES ecies = new ECIES(keyLength.getSelectedItem().toString());
+						ECECIESMessage ececiesMessage = (ECECIESMessage) ReadFile.readFile(ecFile, "ReadEcECIESFile");
+						decryptedText.setText(ecies.ecDecrypt(ececiesMessage, ReadKey.read(file)));
 					}
 					
 				}
