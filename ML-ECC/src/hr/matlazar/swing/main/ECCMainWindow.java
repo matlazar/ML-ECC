@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import hr.matlazar.ecc.algoritams.ECDSA;
+import hr.matlazar.ecc.algoritams.ECES;
 import hr.matlazar.ecc.algoritams.ECIES;
 import hr.matlazar.ecc.algoritams.ElGamal;
 import hr.matlazar.ecc.arithmetic.PointEC;
@@ -24,6 +25,7 @@ import hr.matlazar.ecc.domains.ECDSASignature;
 import hr.matlazar.ecc.domains.ECECIESMessage;
 import hr.matlazar.ecc.domains.ECIESMessage;
 import hr.matlazar.ecc.domains.ElGamalSend;
+import hr.matlazar.ecc.domains.KeyDomain;
 import hr.matlazar.ecc.domains.KeyPair;
 import hr.matlazar.ecc.fileRW.ReadEncrytedText;
 import hr.matlazar.ecc.fileRW.ReadFile;
@@ -196,7 +198,13 @@ public class ECCMainWindow {
 						ECIESMessage eciesMessage = (ECIESMessage) ReadFile.readFile(eciesFile, "ECIES");
 						encryptedText.setText(eciesMessage.getMessage());
 					} else if(algorithamBox.getSelectedItem().toString().equals("ECES")) {
-						
+						File ecesFile = new File("files/eces.txt");
+						ECES eces = new ECES(keyLength.getSelectedItem().toString());
+						String[] coordinates = ReadKey.read(file).split("-");
+						PointEC pointEC =  new PointEC(new BigInteger(coordinates[0]), new BigInteger(coordinates[1]), true);
+						eces.encrypt(pointEC, txtToEncryt.getText());
+						KeyDomain keyDomain = (KeyDomain) ReadFile.readFile(ecesFile, "ECESRead");
+						encryptedText.setText(keyDomain.getMessage());
 					} else {
 						File ecFile = new File("files/ecEcies.txt");
 						ECIES ecies = new ECIES(keyLength.getSelectedItem().toString());
@@ -229,7 +237,10 @@ public class ECCMainWindow {
 						ECIESMessage eciesMessage = (ECIESMessage) ReadFile.readFile(eciesFile, "ECIES");
 						decryptedText.setText(ecies.decrypt(eciesMessage, ReadKey.read(file)));
 					} else if(algorithamBox.getSelectedItem().toString().equals("ECES")) {
-						
+						File ecesFile = new File("files/eces.txt");
+						ECES eces = new ECES(keyLength.getSelectedItem().toString());
+						KeyDomain keyDomain = (KeyDomain) ReadFile.readFile(ecesFile, "ECESRead");
+						decryptedText.setText(eces.decrypt(keyDomain, ReadKey.read(file)));
 					} else {
 						File ecFile = new File("files/ecEcies.txt");
 						ECIES ecies = new ECIES(keyLength.getSelectedItem().toString());

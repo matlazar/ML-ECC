@@ -19,6 +19,8 @@ public class ReadFile {
 			return ReadKey.read(file);
 		case "ReadEcECIESFile":
 			return ReadEcECIESFile.readECIESMessage(file);
+		case "ECESRead":
+			return ECESRead.readECESMessage(file);
 		default:
 			return null;
 		}

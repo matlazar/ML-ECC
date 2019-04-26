@@ -1,5 +1,6 @@
 package hr.matlazar.ecc.algoritams;
 
+import java.io.File;
 import java.math.BigInteger;
 import java.util.Base64;
 import java.util.Random;
@@ -8,10 +9,11 @@ import hr.matlazar.ecc.arithmetic.ECCArithmetic;
 import hr.matlazar.ecc.arithmetic.PointEC;
 import hr.matlazar.ecc.constants.DomainParameters;
 import hr.matlazar.ecc.domains.KeyDomain;
+import hr.matlazar.ecc.fileRW.WriteFile;
 
 public class ECES {
 	
-	
+	File file = new File("files/eces.txt");
 	
 	BigInteger p = new BigInteger(DomainParameters.secp192k1_p.replaceAll(" ", ""), 16);
 	BigInteger n = new BigInteger(DomainParameters.secp192k1_n.replaceAll(" ", ""), 16);
@@ -169,6 +171,7 @@ public class ECES {
 		KeyDomain keyDomain = new KeyDomain();
 		keyDomain.setMessage(Base64.getEncoder().encodeToString(c.toByteArray()));
 		keyDomain.setSharedSecret(r);
+		WriteFile.write(file, keyDomain.getMessage(), keyDomain.getSharedSecret().getX() + "-" + keyDomain.getSharedSecret().getY());
 		return keyDomain;
 	}
 	
