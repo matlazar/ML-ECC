@@ -11,7 +11,7 @@ public class PopUp {
 	
 	public void popUpWindow(String note) {
 		JLabel jLabel = new JLabel(note, JLabel.CENTER);
-		jLabel.setForeground(Color.RED);
+		jLabel.setForeground(Color.GREEN);
 	    JOptionPane optionPane = new JOptionPane(jLabel);
 	    JDialog dialog = optionPane.createDialog("");
 	    dialog.setModal(true);
