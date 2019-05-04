@@ -45,7 +45,7 @@ public class ECCArithmetic {
 		BigInteger lambda = null;
 		BigInteger x1 = null;
 		BigInteger y1 = null;
-		;
+		
 
 		if (t.getX().equals(new BigInteger("0")) && t.getY().equals(new BigInteger("0"))) {
 			return t;
